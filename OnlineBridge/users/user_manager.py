@@ -1,7 +1,7 @@
 from flask_user import UserManager
 from flask import request, redirect, url_for, render_template, flash, current_app
 import flask_user.signals as signals
-from urllib.parse import quote, unquote
+from urllib.parse import quote
 from datetime import datetime
 from OnlineBridge.users.forms import MyRegisterForm
 
