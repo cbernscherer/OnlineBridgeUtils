@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_user import UserManager
 from flask_mail import Mail
+from OnlineBridge.users.user_manager import MyUserManager
 from OnlineBridge.config import ConfigApp
 
 app = Flask(__name__)
@@ -14,7 +14,7 @@ from OnlineBridge.users.models import User, Role, UserRoles
 
 Migrate(app, db)
 
-user_manager = UserManager(app, db, User)
+user_manager = MyUserManager(app, db, User)
 
 from utilities.populate_db import populate
 try:
