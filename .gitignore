@@ -1,0 +1,5 @@
+/venv/
+/OnlineBridge/static/data/SpoXls.xls
+/OnlineBridge/static/data/guests.xlsx
+/OnlineBridge/data.sqlite
+/migrations/
