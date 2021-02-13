@@ -1,0 +1,1 @@
+from utilities.sluggenerator import create_random_slug
