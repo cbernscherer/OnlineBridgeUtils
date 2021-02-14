@@ -2,11 +2,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
+from flask_bootstrap import Bootstrap
 from OnlineBridge.users.user_manager import MyUserManager
 from OnlineBridge.config import ConfigApp
 
 app = Flask(__name__)
 app.config.from_object(ConfigApp())
+
+Bootstrap(app)
 
 db = SQLAlchemy(app)
 

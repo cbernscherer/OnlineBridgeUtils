@@ -16,10 +16,12 @@ class ConfigAuth:
     USER_ENABLE_USERNAME = False
     USER_ENABLE_CHANGE_USERNAME = False
 
+    USER_AUTO_LOGIN_AFTER_REGISTER = False
     USER_APP_NAME = 'Online Bridge Utilities'
     USER_EMAIL_SENDER_EMAIL = os.environ['EMAIL_USER']
     USER_SEND_REGISTERED_EMAIL = False
     USER_SEND_USERNAME_CHANGED_EMAIL = False
+    USER_SHOW_EMAIL_DOES_NOT_EXIST = True
 
 
 class ConfigApp(ConfigMail, ConfigAuth):

@@ -3,7 +3,7 @@ from flask import request, redirect, url_for, render_template, flash, current_ap
 import flask_user.signals as signals
 from urllib.parse import quote
 from datetime import datetime
-from OnlineBridge.users.forms import MyRegisterForm
+from OnlineBridge.users.forms import MyRegisterForm, MyLoginForm
 
 class MyUserManager(UserManager):
 
@@ -11,6 +11,7 @@ class MyUserManager(UserManager):
 
         # Configure customized forms
         self.RegisterFormClass = MyRegisterForm
+        self.LoginFormClass = MyLoginForm
 
 
     def register_view(self):
