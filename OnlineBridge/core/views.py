@@ -12,6 +12,10 @@ def index():
 def about():
     return render_template('about.html')
 
+@core.route('/license')
+def license():
+    return render_template('license.html')
+
 @core.route('/impressum')
 def impressum():
     return render_template('impressum.html')

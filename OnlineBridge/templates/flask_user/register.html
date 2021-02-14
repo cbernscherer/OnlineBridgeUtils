@@ -1,46 +1,67 @@
-{% extends 'flask_user/_public_base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-{% from "flask_user/_macros.html" import render_field, render_submit_field %}
-<h1>{%trans%}Register{%endtrans%}</h1>
+  <div class="jumbotron">
+    <h1>Registrierung</h1>
 
-<form action="" method="POST" novalidate formnovalidate class="form" role="form">
-    {{ form.hidden_tag() }}
+      <form action="" method="post" class="form" role="form">
+        {{ form.hidden_tag() }}
 
-    {# Username or Email #}
-    {% set field = form.username if user_manager.USER_ENABLE_USERNAME else form.email %}
-    <div class="form-group {% if field.errors %}has-error{% endif %}">
-        {# Label on left, "Already registered? Sign in." on right #}
-        <div class="row">
-            <div class="col-xs-6">
-                <label for="{{ field.id }}" class="control-label">{{ field.label.text }}</label>
-            </div>
-            <div class="col-xs-6 text-right">
-                {% if user_manager.USER_ENABLE_REGISTER %}
-                    <a href="{{ url_for('user.login') }}" tabindex='290'>
-                        {%trans%}Already registered? Sign in.{%endtrans%}</a>
-                {% endif %}
-            </div>
+        <br>
+      {% set field= form.email %}
+      <div class="form-group {% if field.errors %}has-error{% endif %}">
+        <label for="{{ field.id }}" class="control-label">Email</label>
+        {{ field(class='form-control') }}
+      </div>
+
+      <div class="form-row">
+        <div class="col">
+          {% set field= form.password %}
+          <div class="form-group {% if field.errors %}has-error{% endif %}">
+            <label for="{{ field.id }}" class="control-label">Passwort</label>
+            {{ field(class='form-control') }}
+          </div>
+
         </div>
-        {{ field(class_='form-control', tabindex=210) }}
-        {% if field.errors %}
-            {% for e in field.errors %}
-                <p class="help-block">{{ e }}</p>
-            {% endfor %}
-        {% endif %}
-    </div>
 
-    {% if user_manager.USER_ENABLE_EMAIL and user_manager.USER_ENABLE_USERNAME %}
-        {{ render_field(form.email, tabindex=220) }}
-    {% endif %}
+        <div class="col">
+          {% set field= form.retype_password %}
+          <div class="form-group {% if field.errors %}has-error{% endif %}">
+            <label for="{{ field.id }}" class="control-label">Passwort bestätigen</label>
+            {{ field(class='form-control') }}
+          </div>
 
-    {{ render_field(form.password, tabindex=230) }}
+        </div>
+      </div>
 
-    {% if user_manager.USER_REQUIRE_RETYPE_PASSWORD %}
-        {{ render_field(form.retype_password, tabindex=240) }}
-    {% endif %}
+      <div class="form-row">
+        <div class="col">
+          {% set field= form.oebv_nr %}
+          <div class="form-group {% if field.errors %}has-error{% endif %}">
+            {{ field.label }}
+            {{ field(class='form-control') }}
+          </div>
+        </div>
+        <div class="col">
+          {% set field= form.guest_nr %}
+          <div class="form-group {% if field.errors %}has-error{% endif %}">
+            {{ field.label }}
+            {{ field(class='form-control', placeholder='XXX9999') }}
+          </div>
+        </div>
+      </div>
 
-    {{ render_submit_field(form.submit, tabindex=280) }}
-</form>
+      {% set field= form.last_name %}
+      <div class="form-group {% if field.errors %}has-error{% endif %}">
+        {{ field.label }}
+        {{ field(class='form-control') }}
+      </div>
 
+      <input type="submit" class="btn btn-default btn-primary mt-3" value="Registrieren">
+      <small class="form-text">
+        <a href="/user/sign-in">bereits registriert</a>
+      </small>
+
+    </form>
+  </div>
 {% endblock %}
