@@ -15,6 +15,7 @@ class ConfigMail:
 class ConfigAuth:
     USER_ENABLE_USERNAME = False
     USER_ENABLE_CHANGE_USERNAME = False
+    USER_ALLOW_LOGIN_WITHOUT_CONFIRMED_EMAIL = True
 
     USER_AUTO_LOGIN_AFTER_REGISTER = False
     USER_APP_NAME = 'Online Bridge Utilities'

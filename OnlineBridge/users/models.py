@@ -15,8 +15,8 @@ class User(db.Model, UserMixin):
 
     # User fields
     active = db.Column(db.Boolean(), default=True)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
+    first_name = db.Column(db.String(50), nullable=False, default='MISSING')
+    last_name = db.Column(db.String(50), nullable=False, default='MISSING')
     sex = db.Column(db.String(1), nullable=False, default='f') # f female m male
 
     slug = db.Column(db.String(24), nullable=False, unique=True, index=True, default=create_random_slug(24))

@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:sqlite:D:\Users\cbern\Document20\PythonProjects\OnlineBridgeUtils\OnlineBridge\data.sqlite</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="data.sqlite" uuid="11c815b8-ae4b-4717-b28c-eb84ca10161f">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\Users\cbern\Document20\PythonProjects\OnlineBridgeUtils\OnlineBridge\data.sqlite</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

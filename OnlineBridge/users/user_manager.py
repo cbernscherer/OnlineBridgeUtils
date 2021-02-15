@@ -4,6 +4,8 @@ import flask_user.signals as signals
 from urllib.parse import quote
 from datetime import datetime
 from OnlineBridge.users.forms import MyRegisterForm, MyLoginForm
+from OnlineBridge.users.models import Role, Member
+
 
 class MyUserManager(UserManager):
 
@@ -53,7 +55,6 @@ class MyUserManager(UserManager):
 
         # Process valid POST
         if request.method == 'POST' and register_form.validate():
-            abort(403)
             user = self.db_manager.add_user()
             register_form.populate_obj(user)
             user_email = self.db_manager.add_user_email(user=user, is_primary=True)
@@ -61,6 +62,29 @@ class MyUserManager(UserManager):
 
             # Store password hash instead of password
             user.password = self.hash_password(user.password)
+
+            # fill additional fields
+            role_player = Role.query.filter_by(name='Player').first()
+            user.roles.append(role_player)
+
+            oebv_nr = register_form.oebv_nr.data
+            guest_nr = register_form.guest_nr.data
+            member = None
+
+            not_valid_mess = 'Abgleich mit Spielertabelle fehlgeschlagen'
+            already_exist_mess = 'Zu diesem Spieler gibt es schon einen Benutzer'
+
+            if oebv_nr and oebv_nr > 0:
+                member = Member.query.filter_by(fed_nr=oebv_nr).first()
+            elif guest_nr:
+                member = Member.query.filter_by(guest_nr=guest_nr).first()
+
+            if not member:
+                abort(404)
+
+            user.first_name = member.first_name
+            user.last_name = member.last_name
+            user.member_id = member.id
 
             # Email confirmation depends on the USER_ENABLE_CONFIRM_EMAIL setting
             request_email_confirmation = self.USER_ENABLE_CONFIRM_EMAIL
