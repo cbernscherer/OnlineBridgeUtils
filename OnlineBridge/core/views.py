@@ -23,3 +23,7 @@ def impressum():
 @core.route('/data_protection')
 def data_protection():
     return render_template('ds.html')
+
+@core.route('/user/reg_complete')
+def reg_complete():
+    return render_template('reg_compl.html')

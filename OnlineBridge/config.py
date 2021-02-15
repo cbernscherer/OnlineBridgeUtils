@@ -24,6 +24,8 @@ class ConfigAuth:
     USER_SEND_USERNAME_CHANGED_EMAIL = False
     USER_SHOW_EMAIL_DOES_NOT_EXIST = True
 
+    USER_AFTER_REGISTER_ENDPOINT = 'core.reg_complete'
+
 
 class ConfigApp(ConfigMail, ConfigAuth):
 

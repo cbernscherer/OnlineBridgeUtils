@@ -49,7 +49,14 @@
 
     <ul class="navbar-nav mr-3">
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Benutzer</a>
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+           aria-expanded="false">
+          {% if current_user.is_authenticated %}
+            {{ current_user.first_name }}
+          {% else %}
+            Benutzer
+          {% endif %}
+        </a>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="/user/sign-in">Anmelden</a>
           <a class="dropdown-item" href="/user/register">Registrieren</a>
