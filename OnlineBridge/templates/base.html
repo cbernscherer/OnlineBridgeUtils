@@ -79,7 +79,7 @@
     alert-success
   {% elif mess[0]=='warning' %}
     alert-warning
-  {% elif mess[0]=='danger' %}
+  {% elif mess[0] in ['danger', 'error'] %}
     alert-danger
   {% elif mess[0]=='info' %}
     alert-info

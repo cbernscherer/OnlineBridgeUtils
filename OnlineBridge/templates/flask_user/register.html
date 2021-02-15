@@ -6,7 +6,7 @@
 
       <form action="" method="post" class="form" role="form">
         {{ form.hidden_tag() }}
-        {{ wtf.form_errors(form, hiddens=True) }}
+        {{ wtf.form_errors(form, hiddens='only') }}
 
         {{ wtf.form_field(form.email) }}
 
@@ -23,8 +23,9 @@
       <div class="myGroup">
         <div style="margin: 1%">
           <p>
-            Diese drei Felder dienen der Zuordnung des Benutzers zur Spielertabelle und der Prüfung der Identität.
-            Österreichische Spieler mögen bitte ihre ÖBV-Nummer, unsere internationalen Gäste die ID,
+            Diese drei Felder dienen der Zuordnung des Benutzers zur Spielertabelle
+            und der Prüfung der Identität. Österreichische Spieler mögen bitte ihre
+            ÖBV-Nummer, unsere internationalen Gäste die ID (ÖBV-Nr 0 lassen),
             die sie von uns erhalten, eintragen.
           </p>
           <div class="form-row">

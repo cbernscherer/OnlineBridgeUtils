@@ -1,5 +1,5 @@
 from flask_user import UserManager
-from flask import request, redirect, url_for, render_template, flash, current_app
+from flask import request, redirect, url_for, render_template, flash, current_app, abort
 import flask_user.signals as signals
 from urllib.parse import quote
 from datetime import datetime
@@ -53,6 +53,7 @@ class MyUserManager(UserManager):
 
         # Process valid POST
         if request.method == 'POST' and register_form.validate():
+            abort(403)
             user = self.db_manager.add_user()
             register_form.populate_obj(user)
             user_email = self.db_manager.add_user_email(user=user, is_primary=True)
