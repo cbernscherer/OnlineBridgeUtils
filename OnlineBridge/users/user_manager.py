@@ -5,6 +5,8 @@ from urllib.parse import quote
 from datetime import datetime
 from OnlineBridge.users.forms import MyRegisterForm, MyLoginForm
 from OnlineBridge.users.models import Role, Member
+from OnlineBridge import mail, app
+from flask_mail import Message
 
 
 class MyUserManager(UserManager):
@@ -102,7 +104,8 @@ class MyUserManager(UserManager):
             if self.USER_SEND_REGISTERED_EMAIL:
                 try:
                     # Send 'confirm email' or 'registered' email
-                    self._send_registered_email(user, user_email, request_email_confirmation)
+                    # self._send_registered_email(user, user_email, request_email_confirmation)
+                    self.send_registered_email(user)
                 except Exception as e:
                     # delete new User object if send  fails
                     self.db_manager.delete_object(user)
@@ -135,3 +138,26 @@ class MyUserManager(UserManager):
                       form=register_form,
                       login_form=login_form,
                       register_form=register_form)
+
+
+    def send_registered_email(self, user):
+
+        email = user.email
+
+        # Generate a confirm_email_link
+        object_id = user.id
+        token = self.generate_token(object_id)
+        confirm_email_link = url_for('user.confirm_email', token=token, _external=True)
+
+        context = {
+            'app_name': app.config['USER_APP_NAME'],
+            'user': user,
+            'confirm_email_link': confirm_email_link
+        }
+
+        subject = render_template('flask_user/emails/registered_subject.txt', **context)
+        body = render_template('flask_user/emails/registered_message.html', **context)
+
+        message = Message(subject=subject, recipients=[email])
+        message.html = body
+        mail.send(message)
