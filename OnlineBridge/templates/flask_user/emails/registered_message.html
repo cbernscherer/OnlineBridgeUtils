@@ -1,0 +1,16 @@
+{% extends 'flask_user/emails/base_message.html' %}
+
+{% block message %}
+
+<p>Danke, dass du dich bei {{ app_name }} registriert hast.</p>
+
+{% if confirm_email_link -%}
+<p>Als nächstes musst du bitte deine Email bestätigen.</p>
+
+<p>Bitte klicke auf den Link unten :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ confirm_email_link }}">Email bestätigen</a>.</p>
+
+<p>Falls du diese Registrierung nicht initiiert hast, ignoriere bitte diese Mail.</p>
+{%- endif %}
+
+{% endblock %}

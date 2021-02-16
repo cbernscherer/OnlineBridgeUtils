@@ -98,9 +98,9 @@
       <span aria-hidden="true">&times;</span>
     </button>
     {% if mess|length == 1 %}
-       {{ mess }}
+       {{ mess | safe }}
     {% else %} 
-      {{ mess[1] }}
+      {{ mess[1] | safe }}
     {% endif %} 
     </div>
   {% endfor %}

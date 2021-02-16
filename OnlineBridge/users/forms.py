@@ -3,9 +3,9 @@ from wtforms.fields.html5 import IntegerField
 from wtforms.validators import InputRequired, Length, ValidationError
 from utilities.my_validators import MyRegExValidator
 from OnlineBridge.users.models import Member
+from flask_user.forms import RegisterForm, LoginForm, ResendEmailConfirmationForm
 
 # Customize the Register form:
-from flask_user.forms import RegisterForm, LoginForm
 class MyRegisterForm(RegisterForm):
     # Add fields for member validation
     oebv_nr = IntegerField('ÖBV-Nummer', default=0, validators=[InputRequired()])
@@ -65,3 +65,13 @@ class MyLoginForm(LoginForm):
         self.remember_me.label.text = 'angemeldet bleiben'
         self.submit.label.text = 'Anmelden'
         self.email.render_kw = {'autofocus': True}
+
+
+class MyResendEmailConfirmationForm(ResendEmailConfirmationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(MyResendEmailConfirmationForm, self).__init__(*args, **kwargs)
+
+        self.email.render_kw = {'autofocus': True}
+        self.email.label.text = 'Deine Email'
+        self.submit.label.text = 'Erneut senden'

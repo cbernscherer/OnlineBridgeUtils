@@ -28,6 +28,7 @@ class ConfigAuth:
     USER_SHOW_EMAIL_DOES_NOT_EXIST = True
 
     USER_AFTER_REGISTER_ENDPOINT = 'core.reg_complete'
+    USER_AFTER_RESEND_EMAIL_CONFIRMATION_ENDPOINT  = 'core.reg_complete'
 
 
 class ConfigApp(ConfigMail, ConfigAuth):

@@ -3,7 +3,11 @@ from flask import request, redirect, url_for, render_template, flash, current_ap
 import flask_user.signals as signals
 from urllib.parse import quote
 from datetime import datetime
-from OnlineBridge.users.forms import MyRegisterForm, MyLoginForm
+from OnlineBridge.users.forms import (
+    MyRegisterForm,
+    MyLoginForm,
+    MyResendEmailConfirmationForm
+)
 from OnlineBridge.users.models import Role, Member
 from OnlineBridge import mail, app
 from flask_mail import Message
@@ -16,6 +20,7 @@ class MyUserManager(UserManager):
         # Configure customized forms
         self.RegisterFormClass = MyRegisterForm
         self.LoginFormClass = MyLoginForm
+        self.ResendEmailConfirmationFormClass = MyResendEmailConfirmationForm
 
 
     def register_view(self):
@@ -138,6 +143,31 @@ class MyUserManager(UserManager):
                       form=register_form,
                       login_form=login_form,
                       register_form=register_form)
+
+
+    def resend_email_confirmation_view(self):
+        """Prompt for email and re-send email conformation email."""
+
+        # Initialize form
+        form = self.ResendEmailConfirmationFormClass(request.form)
+
+        # Process valid POST
+        if request.method == 'POST' and form.validate():
+
+            # Find user by email
+            email = form.email.data
+            user, user_email = self.db_manager.get_user_and_user_email_by_email(email)
+
+            # Send confirm_email email
+            if user:
+                self._send_confirm_email_email(user, user_email)
+
+            # Redirect to the login page
+            return redirect(self._endpoint_url(self.USER_AFTER_RESEND_EMAIL_CONFIRMATION_ENDPOINT))
+
+        # Render form
+        self.prepare_domain_translations()
+        return render_template(self.USER_RESEND_CONFIRM_EMAIL_TEMPLATE, form=form)
 
 
     def send_registered_email(self, user):
