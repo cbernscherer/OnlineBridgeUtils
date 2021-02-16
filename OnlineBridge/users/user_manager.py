@@ -160,7 +160,7 @@ class MyUserManager(UserManager):
 
             # Send confirm_email email
             if user:
-                self._send_confirm_email_email(user, user_email)
+                self.send_registered_email(user)
 
             # Redirect to the login page
             return redirect(self._endpoint_url(self.USER_AFTER_RESEND_EMAIL_CONFIRMATION_ENDPOINT))
