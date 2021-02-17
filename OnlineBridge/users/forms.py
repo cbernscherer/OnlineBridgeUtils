@@ -1,9 +1,16 @@
-from wtforms import StringField
+from wtforms import StringField, SelectField
 from wtforms.fields.html5 import IntegerField
 from wtforms.validators import InputRequired, Length, ValidationError
 from utilities.my_validators import MyRegExValidator
 from OnlineBridge.users.models import Member
-from flask_user.forms import RegisterForm, LoginForm, ResendEmailConfirmationForm, ChangePasswordForm
+from flask_user.forms import (
+    RegisterForm,
+    LoginForm,
+    ResendEmailConfirmationForm,
+    ChangePasswordForm,
+    EditUserProfileForm,
+    ForgotPasswordForm
+)
 
 # Customize the Register form:
 class MyRegisterForm(RegisterForm):
@@ -87,3 +94,26 @@ class MyChangePasswordForm(ChangePasswordForm):
         self.new_password.label.text = 'Neues Passwort'
         self.retype_password.label.text = 'Passwort bestätigen'
         self.submit.label.text = 'Passwort ändern'
+
+
+class MyForgotPasswordForm(ForgotPasswordForm):
+
+    def __init__(self, *args, **kwargs):
+        super(MyForgotPasswordForm, self).__init__(*args, **kwargs)
+
+        self.email.render_kw = {'autofocus': True}
+        self.email.label.text = 'Deine Email'
+        self.submit.label.text = 'Passwort zurÁcksetzen'
+
+
+class MyEditUserProfileForm(EditUserProfileForm):
+    sex = SelectField('Anrede', validators=[InputRequired()], choices=[('f', 'Frau'), ('m', 'Herr')],
+                      render_kw={'autofocus': True})
+    
+    def __init__(self, *args, **kwargs):
+
+        super(MyEditUserProfileForm, self).__init__(*args, **kwargs)
+
+        self.first_name.label.text = 'Vorname'
+        self.last_name.label.text = 'Familienname'
+        self.submit.label.text = 'Speichern'

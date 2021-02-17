@@ -7,7 +7,9 @@ from OnlineBridge.users.forms import (
     MyRegisterForm,
     MyLoginForm,
     MyResendEmailConfirmationForm,
-    MyChangePasswordForm
+    MyChangePasswordForm,
+    MyForgotPasswordForm,
+MyEditUserProfileForm
 )
 from OnlineBridge.users.models import Role, Member
 from OnlineBridge import mail, app
@@ -23,6 +25,8 @@ class MyUserManager(UserManager):
         self.LoginFormClass = MyLoginForm
         self.ResendEmailConfirmationFormClass = MyResendEmailConfirmationForm
         self.ChangePasswordFormClass = MyChangePasswordForm
+        self.ForgotPasswordFormClass = MyForgotPasswordForm
+        self.EditUserProfileFormClass = MyEditUserProfileForm
 
 
     def register_view(self):

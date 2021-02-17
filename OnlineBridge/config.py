@@ -30,6 +30,8 @@ class ConfigAuth:
     USER_AFTER_REGISTER_ENDPOINT = 'core.reg_complete'
     USER_AFTER_RESEND_EMAIL_CONFIRMATION_ENDPOINT  = 'core.reg_complete'
     USER_AFTER_CHANGE_PASSWORD_ENDPOINT = 'user.login'
+    USER_AFTER_FORGOT_PASSWORD_ENDPOINT = 'core.password_reset'
+    USER_AFTER_CONFIRM_ENDPOINT = 'user.edit_user_profile'
 
 
 class ConfigApp(ConfigMail, ConfigAuth):

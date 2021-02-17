@@ -26,3 +26,7 @@ def data_protection():
 @core.route('/user/reg_complete')
 def reg_complete():
     return render_template('reg_compl.html')
+
+@core.route('/user/password_reset')
+def password_reset():
+    return render_template('password_reset.html')

@@ -1,30 +1,46 @@
-{% extends 'flask_user/_authorized_base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
-<h1>{%trans%}User profile{%endtrans%}</h1>
+  <div class="jumbotron">
+    <h1>Profil</h1>
+    <p class="mt-3">
+      Hier kannst du festlegen, wie du deinen Namen bei RealBridge Turnieren, für die wir persönliche Links
+      generieren, geschrieben haben willst. Beispielsweise Akzente, Kurzformen für den Vornamen.
+    </p>
 
-<form action="" method="POST" class="form" role="form">
-    {{ form.hidden_tag() }}
-    {% for field in form %}
-        {% if not field.flags.hidden %}
-            {% if field.type=='SubmitField' %}
-                {{ render_submit_field(field, tabindex=loop.index*10) }}
-            {% else %}
-                {{ render_field(field, tabindex=loop.index*10) }}
-            {% endif %}
+    <form class="form" method="post" role="form">
+      {{ form.hidden_tag() }}
+      {{ wtf.form_errors(form, hiddens='only') }}
+
+      <div class="form-row">
+        <div class="col-2">
+          {{ wtf.form_field(form.sex) }}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col">
+          {{ wtf.form_field(form.first_name) }}
+        </div>
+        <div class="col">
+          {{ wtf.form_field(form.last_name) }}
+        </div>
+      </div>
+
+      {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
+    </form>
+
+    <br/>
+
+    {% if not user_manager.USER_ENABLE_AUTH0 %}
+        {% if user_manager.USER_ENABLE_CHANGE_USERNAME %}
+            <p><a href="{{ url_for('user.change_username') }}">Benutzernamen ändern</a></p>
         {% endif %}
-    {% endfor %}
-</form>
-<br/>
+        {% if user_manager.USER_ENABLE_CHANGE_PASSWORD %}
+            <p><a href="{{ url_for('user.change_password') }}">Passwort ändern</a></p>
+        {% endif %}
+    {% endif %}
 
-{% if not user_manager.USER_ENABLE_AUTH0 %}
-    {% if user_manager.USER_ENABLE_CHANGE_USERNAME %}
-        <p><a href="{{ url_for('user.change_username') }}">{%trans%}Change username{%endtrans%}</a></p>
-    {% endif %}
-    {% if user_manager.USER_ENABLE_CHANGE_PASSWORD %}
-        <p><a href="{{ url_for('user.change_password') }}">{%trans%}Change password{%endtrans%}</a></p>
-    {% endif %}
-{% endif %}
+  </div>
 
 {% endblock %}

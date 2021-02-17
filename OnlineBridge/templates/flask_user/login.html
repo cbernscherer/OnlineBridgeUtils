@@ -6,17 +6,18 @@
 
     <form class="form" method="post" role="form">
       {{ form.hidden_tag() }}
-      {{ wtf.form_errors(form, hiddens=True) }}
+      {{ wtf.form_errors(form, hiddens='only') }}
 
       {{ wtf.form_field(form.email) }}
       {{ wtf.form_field(form.password) }}
       {{ wtf.form_field(form.remember_me) }}
       {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
-
-      <small class="form-text">
-        <a href="#">Passwort vergessen</a>
-        <a href="/user/register">noch nicht registriert</a>
-      </small>
     </form>
+    <br>
+
+    <p>
+      <a href="{{ url_for('user.forgot_password') }}">Passwort vergessen</a>
+      <a href="{{ url_for('user.register') }}">noch nicht registriert</a>
+    </p>
   </div>
 {% endblock %}

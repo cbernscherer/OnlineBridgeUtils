@@ -58,13 +58,15 @@
           {% endif %}
         </a>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="/user/sign-in">Anmelden</a>
-          <a class="dropdown-item" href="/user/register">Registrieren</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Profil</a>
-          <a class="dropdown-item" href="/user/change-password">Passwort ändern</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/user/sign-out">Abmelden</a>
+          {% if current_user.is_authenticated %}
+            <a class="dropdown-item" href="{{ url_for('user.edit_user_profile') }}">Profil</a>
+            <a class="dropdown-item" href="{{ url_for('user.change_password') }}">Passwort ändern</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ url_for('user.logout') }}">Abmelden</a>
+          {% else %}
+            <a class="dropdown-item" href="{{ url_for('user.login') }}">Anmelden</a>
+            <a class="dropdown-item" href="{{ url_for('user.register') }}">Registrieren</a>
+          {% endif %}
         </div>
       </li>
 
@@ -94,7 +96,7 @@
     alert-dark
   {% endif %}
   alert-dismissible fade show" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="fade close">
+    <button type="button" class="fade close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
     {% if mess|length == 1 %}
