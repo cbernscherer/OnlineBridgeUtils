@@ -1,4 +1,8 @@
-<p>Liebe(r) {{ user.first_name }},</p>
+<p>{% if profile_edited %}
+  Liebe{% if user.sex == 'm' %}r{% endif %}
+{% else %}
+  Liebe(r)
+{% endif %}  {{ user.first_name }},</p>
 
 {% block message %}
 {% endblock %}

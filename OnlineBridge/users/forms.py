@@ -9,7 +9,8 @@ from flask_user.forms import (
     ResendEmailConfirmationForm,
     ChangePasswordForm,
     EditUserProfileForm,
-    ForgotPasswordForm
+    ForgotPasswordForm,
+    ResetPasswordForm
 )
 
 # Customize the Register form:
@@ -96,6 +97,17 @@ class MyChangePasswordForm(ChangePasswordForm):
         self.submit.label.text = 'Passwort ändern'
 
 
+class MyResetPasswordForm(ResetPasswordForm):
+
+    def __init__(self, *args, **kwargs):
+        super(MyResetPasswordForm, self).__init__(*args, **kwargs)
+
+        self.new_password.render_kw = {'autofocus': True}
+        self.new_password.label.text = 'Neues Passwort'
+        self.retype_password.label.text = 'Passwort bestätigen'
+        self.submit.label.text = 'Passwort ändern'
+
+
 class MyForgotPasswordForm(ForgotPasswordForm):
 
     def __init__(self, *args, **kwargs):
@@ -103,7 +115,7 @@ class MyForgotPasswordForm(ForgotPasswordForm):
 
         self.email.render_kw = {'autofocus': True}
         self.email.label.text = 'Deine Email'
-        self.submit.label.text = 'Passwort zurÁcksetzen'
+        self.submit.label.text = 'Passwort zurücksetzen'
 
 
 class MyEditUserProfileForm(EditUserProfileForm):

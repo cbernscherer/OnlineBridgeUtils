@@ -9,7 +9,8 @@ from OnlineBridge.users.forms import (
     MyResendEmailConfirmationForm,
     MyChangePasswordForm,
     MyForgotPasswordForm,
-MyEditUserProfileForm
+    MyEditUserProfileForm,
+    MyResetPasswordForm
 )
 from OnlineBridge.users.models import Role, Member
 from OnlineBridge import mail, app
@@ -27,6 +28,7 @@ class MyUserManager(UserManager):
         self.ChangePasswordFormClass = MyChangePasswordForm
         self.ForgotPasswordFormClass = MyForgotPasswordForm
         self.EditUserProfileFormClass = MyEditUserProfileForm
+        self.ResetPasswordFormClass = MyResetPasswordForm
 
 
     def register_view(self):
@@ -176,6 +178,38 @@ class MyUserManager(UserManager):
         return render_template(self.USER_RESEND_CONFIRM_EMAIL_TEMPLATE, form=form)
 
 
+    def forgot_password_view(self):
+        """Prompt for email and send reset password email."""
+
+        # Initialize form
+        form = self.ForgotPasswordFormClass(request.form)
+
+        # Process valid POST
+        if request.method == 'POST' and form.validate():
+            # Get User and UserEmail by email
+            email = form.email.data
+            user, user_email = self.db_manager.get_user_and_user_email_by_email(email)
+
+            if user and user_email:
+                # Send reset_password email
+                self.send_reset_password_email(user)
+
+                # Send forgot_password signal
+                signals.user_forgot_password.send(current_app._get_current_object(), user=user)
+            #
+            # # Flash a system message
+            # flash(_(
+            #     "A reset password email has been sent to '%(email)s'. Open that email and follow the instructions to reset your password.",
+            #     email=email), 'success')
+
+            # Redirect to the login page
+            return redirect(self._endpoint_url(self.USER_AFTER_FORGOT_PASSWORD_ENDPOINT))
+
+        # Render form
+        self.prepare_domain_translations()
+        return render_template(self.USER_FORGOT_PASSWORD_TEMPLATE, form=form)
+
+
     def send_registered_email(self, user):
 
         email = user.email
@@ -193,6 +227,34 @@ class MyUserManager(UserManager):
 
         subject = render_template('flask_user/emails/registered_subject.txt', **context)
         body = render_template('flask_user/emails/registered_message.html', **context)
+
+        message = Message(subject=subject, recipients=[email])
+        message.html = body
+        mail.send(message)
+
+    def send_reset_password_email(self, user):
+        """Send the 'reset password' email."""
+
+        # Verify config settings
+        if not self.USER_ENABLE_EMAIL: return
+        assert self.USER_ENABLE_FORGOT_PASSWORD
+
+        # The reset_password email is sent to a specific user_email.email or user.email
+        email = user.email
+
+        # Generate a reset_password_link
+        token = self.generate_token(user.id)
+        reset_password_link = url_for('user.reset_password', token=token, _external=True)
+
+        context = {
+            'app_name': app.config['USER_APP_NAME'],
+            'user': user,
+            'reset_password_link': reset_password_link,
+            'profile_edited': True
+        }
+
+        subject = render_template('flask_user/emails/reset_password_subject.txt', **context)
+        body = render_template('flask_user/emails/reset_password_message.html', **context)
 
         message = Message(subject=subject, recipients=[email])
         message.html = body
