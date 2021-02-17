@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-from OnlineBridge import db
-from OnlineBridge.users.models import Role, Member
+from OnlineBridge import db, app
+from OnlineBridge.users.models import Role, Member, User
 
 data_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'OnlineBridge', 'static', 'data')
 data_files = ['SpoXls.xls', 'guests.xlsx']
@@ -42,3 +42,10 @@ def populate():
                             last_name = line[1]
                         ))
                 db.session.commit()
+
+    # assign superuser
+    user = User.query.filter_by(email=app.config['MAIL_USERNAME']).first()
+    if user:
+        user.roles = Role.query.all()
+        db.session.add(user)
+        db.session.commit()

@@ -6,7 +6,8 @@ from datetime import datetime
 from OnlineBridge.users.forms import (
     MyRegisterForm,
     MyLoginForm,
-    MyResendEmailConfirmationForm
+    MyResendEmailConfirmationForm,
+    MyChangePasswordForm
 )
 from OnlineBridge.users.models import Role, Member
 from OnlineBridge import mail, app
@@ -21,6 +22,7 @@ class MyUserManager(UserManager):
         self.RegisterFormClass = MyRegisterForm
         self.LoginFormClass = MyLoginForm
         self.ResendEmailConfirmationFormClass = MyResendEmailConfirmationForm
+        self.ChangePasswordFormClass = MyChangePasswordForm
 
 
     def register_view(self):

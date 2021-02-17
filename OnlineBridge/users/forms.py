@@ -3,7 +3,7 @@ from wtforms.fields.html5 import IntegerField
 from wtforms.validators import InputRequired, Length, ValidationError
 from utilities.my_validators import MyRegExValidator
 from OnlineBridge.users.models import Member
-from flask_user.forms import RegisterForm, LoginForm, ResendEmailConfirmationForm
+from flask_user.forms import RegisterForm, LoginForm, ResendEmailConfirmationForm, ChangePasswordForm
 
 # Customize the Register form:
 class MyRegisterForm(RegisterForm):
@@ -75,3 +75,15 @@ class MyResendEmailConfirmationForm(ResendEmailConfirmationForm):
         self.email.render_kw = {'autofocus': True}
         self.email.label.text = 'Deine Email'
         self.submit.label.text = 'Erneut senden'
+
+
+class MyChangePasswordForm(ChangePasswordForm):
+
+    def __init__(self, *args, **kwargs):
+        super(MyChangePasswordForm, self).__init__(*args, **kwargs)
+
+        self.old_password.render_kw = {'autofocus': True}
+        self.old_password.label.text = 'Altes Passwort'
+        self.new_password.label.text = 'Neues Passwort'
+        self.retype_password.label.text = 'Passwort bestätigen'
+        self.submit.label.text = 'Passwort ändern'
