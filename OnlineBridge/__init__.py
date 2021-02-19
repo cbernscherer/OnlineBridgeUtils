@@ -33,6 +33,8 @@ except:
 
 from OnlineBridge.error_pages.handlers import error_pages
 from OnlineBridge.core.views import core
+from OnlineBridge.admin.views import admin
 
 app.register_blueprint(error_pages)
 app.register_blueprint(core)
+app.register_blueprint(admin, url_prefix='/admin')

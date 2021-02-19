@@ -3,6 +3,27 @@
 {% block content %}
   <div class="jumbotron">
       <h1>WILLKOMMEN!</h1>
+    <p class="mt-3">
+      Diese Webseite soll Tools für Spieler und Turnierleiter rund um Onlinebridge bieten. Hier ist vor allem an
+      <a href="https://realbridge.online/">RealBridge</a>
+      gedacht.
+    </p>
+    <p>Folgende Features sind angedacht:</p>
+    <ul>
+      <li>Depot für Konventionskartenn</li>
+      <li>Anmeldung und abrufen persönlicher Links für Teamturniere </li>
+      <li>Ausweitung auf Paarturniere</li>
+      <li>Hilfe beim Konfigurieren von Turnieren für Turnierleiter</li>
+    </ul>
+    {% if not current_user.is_authenticated %}
+      <p>
+        Bitte melde dich
+        <a href="{{ url_for('user.login') }}">hier</a>
+        an, um die Seite zu verwenden. Dafür ist eine einmalige
+        <a href="{{ url_for('user.register') }}">Registrierung</a>
+        erforderlich.
+      </p>
+    {% endif %}
   </div>
 
 {% endblock %}

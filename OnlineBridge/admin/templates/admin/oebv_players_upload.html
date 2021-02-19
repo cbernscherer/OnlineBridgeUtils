@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1>ÖBV Spielertabelle hochladen</h1>
+
+    {{ wtf.quick_form(form, extra_classes=' mt-3 ', button_map={'submit':'primary'}) }}
+
+  </div>
+{% endblock %}

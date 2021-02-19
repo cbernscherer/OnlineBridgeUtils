@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../static/myStyles.css">
+  <link rel="stylesheet" href="/static/myStyles.css">
 
 {#  favicon #}
   <link rel="apple-touch-icon" sizes="57x57" href="/static/images/apple-icon-57x57.png">
@@ -42,9 +42,37 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
 
-      <li class="nav-item">
-        <a class="nav-link" href="#">Konventionskarten</a>
-      </li>
+      {% if current_user.is_authenticated and current_user.has_roles('Admin') %}
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            Admin
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">registrierte Benutzer</a>
+            <a class="dropdown-item" href="{{ url_for('admin.player_upload') }}">&Ouml;BV-Spieler importieren</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">G&auml;ste</a>
+          </div>
+        </li>
+      {% endif %}
+
+      {% if current_user.is_authenticated %}
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            Konventionskarten
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">meine Karten</a>
+            <a class="dropdown-item" href="#">neue Karte</a>
+            {% if current_user.has_roles('Director') %}
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Karten eines Spielers</a>
+            {% endif %}
+          </div>
+        </li>
+      {% endif %}
     </ul>
 
     <ul class="navbar-nav mr-4">

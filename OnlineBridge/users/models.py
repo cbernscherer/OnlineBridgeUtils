@@ -28,7 +28,6 @@ class User(db.Model, UserMixin):
     member_id = db.Column(db.Integer(), db.ForeignKey('members.id', ondelete='CASCADE'))
 
 
-
 # Define the Role data-model
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -59,3 +58,19 @@ class Member(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
 
     user = db.relationship('User', backref='member', uselist=False)
+
+    @property
+    def list_name(self):
+        return ' '.join([self.last_name, self.first_name])
+
+    @property
+    def alias_list_name(self):
+        if not self.user:
+            return None
+
+        alias = ' '.join([self.user.last_name, self.user.first_name])
+
+        if alias == self.list_name:
+            return None
+
+        return alias
