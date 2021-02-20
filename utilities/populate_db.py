@@ -7,6 +7,7 @@ data_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'Onlin
 data_files = [MEMBER_FILENAME, 'guests.xlsx']
 
 def populate():
+
     # roles
     required_roles = ['Superuser', 'Admin', 'Director', 'Player']
 
@@ -27,8 +28,6 @@ def populate():
             if index == 1:
                 # guests
                 command = command.replace('fed_nr', 'guest_nr')
-            # else:
-            #     continue
 
             if member_file in os.listdir(data_dir):
 
@@ -48,7 +47,7 @@ def populate():
 
                     db.session.add(member)
 
-                    db.session.commit()
+                db.session.commit()
 
     # assign superuser
     user = User.query.filter_by(email=app.config['MAIL_USERNAME']).first()

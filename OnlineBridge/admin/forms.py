@@ -5,7 +5,7 @@ from OnlineBridge import MEMBER_FILENAME
 
 class PlayerUploadForm(FlaskForm):
     player_file = FileField(u'ÖBV Datei', description=MEMBER_FILENAME, validators=[InputRequired()],
-                            render_kw={'autofocus':True, 'accept': '.xls, .xlsx'})
+                            render_kw={'autofocus':True, 'accept': MEMBER_FILENAME})
     submit = SubmitField(u'Hochladen')
 
     def validate_player_file(self, field):
