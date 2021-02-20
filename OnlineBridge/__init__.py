@@ -2,6 +2,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from OnlineBridge.config import ConfigApp
 
+
+# for federation members file upload
+MEMBER_FILENAME = 'SpoXls.xls'
+MEMBER_MAPPING = {
+    'fed_nr': 'NR',
+    'first_name': 'VNAME',
+    'last_name': 'NAME'
+}
+
 app = Flask(__name__)
 app.config.from_object(ConfigApp())
 

@@ -10,9 +10,7 @@ def player_upload():
     form = PlayerUploadForm()
 
     if request.method == 'POST' and form.validate_on_submit():
-        player_file = request.files[form.player_file.name]
-        # df = pd.read_excel(player_file)
-        # print(df.head())
+
         return redirect(url_for('core.index'))
 
     return render_template('oebv_players_upload.html', form=form)

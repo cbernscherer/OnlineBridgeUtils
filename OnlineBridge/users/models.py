@@ -74,3 +74,9 @@ class Member(db.Model):
             return None
 
         return alias
+
+    def __repr__(self):
+        if self.fed_nr:
+            return f'{self.fed_nr} {self.last_name} {self.first_name}'
+        else:
+            return f'{self.guest_nr} {self.last_name} {self.first_name}'
