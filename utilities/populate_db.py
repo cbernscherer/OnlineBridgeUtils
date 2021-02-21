@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 from OnlineBridge import db, app, MEMBER_FILENAME, MEMBER_MAPPING
 from OnlineBridge.users.models import Role, Member, User
 
@@ -55,3 +56,33 @@ def populate():
         user.roles = Role.query.all()
         db.session.add(user)
         db.session.commit()
+
+
+def fed_members_upload(member_file):
+    df = pd.DataFrame(pd.read_excel(member_file, usecols=MEMBER_MAPPING.values()))
+
+    members = Member.query.filter(Member.fed_nr.isnot(None)).all()
+    fed_nrs = [m.fed_nr for m in members]
+    members = [m for m in members]
+
+    for line in range(len(df)):
+        fed_nr = int(df.loc[line, MEMBER_MAPPING['fed_nr']])
+        first_name = str(df.loc[line, MEMBER_MAPPING['first_name']]).title()
+        last_name = str(df.loc[line, MEMBER_MAPPING['last_name']]).title()
+
+        if fed_nr in fed_nrs:
+            index = fed_nrs.index(fed_nr)
+            members[index].first_name = first_name
+            members[index].last_name = last_name
+        else:
+            members.append(Member(
+                fed_nr = fed_nr,
+                first_name=first_name,
+                last_name=last_name
+            ))
+
+    db.session.add_all(members)
+    db.session.commit()
+
+
+    return True

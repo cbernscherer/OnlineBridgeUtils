@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, abort
 
 error_pages = Blueprint('error_pages', __name__,template_folder='templates/error_pages')
 
