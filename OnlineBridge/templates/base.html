@@ -52,7 +52,7 @@
             <a class="dropdown-item" href="#">registrierte Benutzer</a>
             <a class="dropdown-item" href="{{ url_for('admin.player_upload') }}">&Ouml;BV-Spieler importieren</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">G&auml;ste</a>
+            <a class="dropdown-item" href="{{ url_for('admin.guests_page') }}">G&auml;ste</a>
           </div>
         </li>
       {% endif %}
