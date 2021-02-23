@@ -1,11 +1,14 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
-from flask_user import roles_required
-from OnlineBridge.admin.forms import PlayerUploadForm, GuestDetailForm
-from OnlineBridge.users.models import Member
+from flask_user import roles_required, current_user
+from OnlineBridge.admin.forms import PlayerUploadForm, GuestDetailForm, UserDetailForm
+from OnlineBridge.users.models import Member, User, Role
 from OnlineBridge import db
 from utilities.populate_db import fed_members_upload
+from math import ceil
 
 admin = Blueprint('admin', __name__, template_folder='templates/admin')
+
+roles_as_str = ['Player', 'Director', 'Admin', 'Superuser']
 
 @admin.route('/player_upload', methods=['GET', 'POST'])
 @roles_required('Admin')
@@ -34,11 +37,13 @@ def player_upload():
 @admin.route('/guests')
 @roles_required('Admin')
 def guests_page():
-    per_page = 8
+    per_page = 15
     page = request.args.get('page', 1, type=int)
 
-    if page < 1:
-        page = 1
+    last_page = ceil(Member.query.filter(Member.guest_nr.isnot(None)).count() / per_page)
+
+    page = min(page, last_page)
+    page = max(page, 1)
 
     # Grab a list of guests from database.
     guests = Member.query.filter(Member.guest_nr.isnot(None)).\
@@ -132,3 +137,60 @@ def guest_delete(slug):
         db.session.commit()
 
     return redirect(url_for('admin.guests_page'))
+
+
+@admin.route('/registered_users')
+@roles_required('Superuser')
+def registered_users():
+    per_page = 15
+    page = request.args.get('page', 1, type=int)
+
+    last_page = ceil(User.query.filter(User.id.__ne__(current_user.id)).count() / per_page)
+
+    page = min(page, last_page)
+    page = max(page, 1)
+
+    reg_users = User.query.filter(User.id.__ne__(current_user.id)).\
+        order_by(User.last_name.asc(), User.first_name.asc()).paginate(page=page, per_page=per_page)
+
+    context = {
+        'reg_users': reg_users,
+        'roles_as_str': roles_as_str
+    }
+
+    return render_template('reg_users_list.html', **context)
+
+
+@admin.route('/user_detail/<string:slug>/<int:page>', methods=['GET', 'POST'])
+@roles_required('Superuser')
+def user_detail(slug, page):
+    user = User.query.filter_by(slug=slug).first_or_404()
+
+    form = UserDetailForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+
+        roles = []
+        for r in roles_as_str:
+            roles.append(Role.query.filter_by(name=r).one())
+
+        user.roles = roles[:form.privileges.data]
+        user.active = form.active.data
+
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('admin.registered_users', page=page))
+
+    elif request.method == 'GET':
+        form.privileges.data = len(user.roles)
+        print(len(user.roles))
+        form.active.data = user.active
+
+    context = {
+        'user': user,
+        'form': form,
+        'page': page
+    }
+
+    return render_template('user_detail.html', **context)

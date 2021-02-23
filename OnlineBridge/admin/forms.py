@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import FileField, SubmitField, StringField
+from wtforms.fields import FileField, SubmitField, StringField, BooleanField, SelectField
+from wtforms.widgets import CheckboxInput
 from wtforms.validators import InputRequired, ValidationError, Length, Regexp
 from OnlineBridge import MEMBER_FILENAME
 
@@ -36,3 +37,11 @@ class GuestDetailForm(FlaskForm):
             self.first_name.render_kw = {
                 'autofocus': True
             }
+
+
+class UserDetailForm(FlaskForm):
+    privileges = SelectField('Berechtigunge', coerce=int, render_kw={'autofocus': True}, choices= [
+        (1, 'Player'), (2, 'Director'), (3, 'Admin'), (4, 'Superuser')
+    ])
+    active = BooleanField('aktiv', widget=CheckboxInput())
+    submit = SubmitField('Speichern')

@@ -8,7 +8,7 @@
   </div>
 
   {% for guest in guests.items %}
-    <a href="{{ url_for('admin.guest_update', slug=guest.slug) }}">
+    <a href="{{ url_for('admin.guest_update', slug=guest.slug) }}" class="text-reset">
       <div class="row {{ loop.cycle('bg-light', 'bg-transparent') }}">
         <div class="col-2 col-lg-1">
           {{ guest.guest_nr }}

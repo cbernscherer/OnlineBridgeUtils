@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import numpy as np
 from OnlineBridge import db, app, MEMBER_FILENAME, MEMBER_MAPPING
 from OnlineBridge.users.models import Role, Member, User
 
