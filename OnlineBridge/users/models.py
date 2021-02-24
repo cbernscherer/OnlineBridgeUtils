@@ -57,7 +57,7 @@ class Member(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
 
-    user = db.relationship('User', backref='member', uselist=False)
+    user = db.relationship('User', backref='member', uselist=False, cascade="all, delete-orphan")
 
     @property
     def list_name(self):
