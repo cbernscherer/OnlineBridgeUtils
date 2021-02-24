@@ -142,7 +142,7 @@ def guest_delete(slug):
 @admin.route('/registered_users')
 @roles_required('Superuser')
 def registered_users():
-    per_page = 15
+    per_page = 8
     page = request.args.get('page', 1, type=int)
 
     last_page = ceil(User.query.filter(User.id.__ne__(current_user.id)).count() / per_page)
@@ -153,8 +153,12 @@ def registered_users():
     reg_users = User.query.filter(User.id.__ne__(current_user.id)).\
         order_by(User.last_name.asc(), User.first_name.asc()).paginate(page=page, per_page=per_page)
 
+    all_users = User.query.filter(User.id.__ne__(current_user.id)).\
+        order_by(User.last_name.asc(), User.first_name.asc()).all()
+
     context = {
         'reg_users': reg_users,
+        'all_users': all_users,
         'roles_as_str': roles_as_str
     }
 
@@ -194,3 +198,38 @@ def user_detail(slug, page):
     }
 
     return render_template('user_detail.html', **context)
+
+
+@admin.route('/user/<slug>/delete<int:page>', methods=['GET'])
+@roles_required('Superuser')
+def user_delete(slug, page):
+
+    if request.method == 'GET':
+        reg_user = User.query.filter_by(slug=slug).one_or_none()
+        if not reg_user:
+            abort(404)
+
+        db.session.delete(reg_user)
+        db.session.commit()
+
+    return redirect(url_for('admin.registered_users', page=page))
+
+
+@admin.route('/get_user', methods=['GET'])
+@roles_required('Superuser')
+def get_user():
+
+    page = request.args.get('page', 1, type=int)
+    getuser = request.args.get('getuser', '', type=str)
+
+    nr = getuser.split()[-1]
+
+    if nr.isdigit():
+        member = Member.query.filter_by(fed_nr=int(nr)).first_or_404()
+    else:
+        member = Member.query.filter_by(guest_nr=nr).first_or_404()
+
+    if member.user.id == current_user.id:
+        abort(403)
+
+    return redirect(url_for('admin.user_detail', slug=member.user.slug, page=page))

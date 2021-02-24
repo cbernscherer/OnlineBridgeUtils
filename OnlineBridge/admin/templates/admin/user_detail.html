@@ -21,77 +21,47 @@
       {% endif %}
     </h5>
 
-     {{ wtf.quick_form(form, extra_classes=' mt-3 ', button_map={'submit':'primary'}) }}
+    <form class="form mt-3" method="post" role="form">
+      {{ form.hidden_tag() }}
+      {{ wtf.form_errors(form, hiddens='only') }}
 
-{##}
-{##}
-{#    <form class="form mt-3" method="post" role="form">#}
-{#      {{ form.hidden_tag() }}#}
-{#      {{ wtf.form_errors(form, hiddens='only') }}#}
-{##}
-{#    {% if new_guest %}#}
-{#      <div class="form-row">#}
-{#        <div class="col-3 col-md-2">#}
-{#          {{ wtf.form_field(form.country_code) }}#}
-{#        </div>#}
-{#      </div>#}
-{#    {% endif %}#}
-{##}
-{#      <div class="form-row">#}
-{#        <div class="col">#}
-{#          {{ wtf.form_field(form.first_name) }}#}
-{#        </div>#}
-{#        <div class="col">#}
-{#          {{ wtf.form_field(form.last_name) }}#}
-{#        </div>#}
-{#      </div>#}
-{##}
-{#      {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}#}
-{##}
-{#      {% if not new_guest %}#}
-{#        <button type="button" class="btn btn-danger ml-2 " data-toggle="modal" data-target="#DelModal">#}
-{#          Löschen#}
-{#        </button>#}
-{#      {% endif %}#}
-{##}
-{#      <a class="btn btn-dark ml-2" href="{{ url_for('admin.guests_page') }}" role="button">Zurück</a>#}
-{#    </form>#}
-{##}
-{#  </div>#}
-{##}
-{##}
-{#  {% if new_guest %}#}
-    {#    datalist#}
-{#    {% if ctry_codes|length() > 0 %}#}
-{#      <datalist id="ctry_codes_list">#}
-{#        {% for ctry_code in ctry_codes %}#}
-{#          <option value="{{ ctry_code }}">#}
-{#        {% endfor %}#}
-{##}
-{#      </datalist>#}
-{#    {% endif %} #}
-{#  {% else %}#}
+      <div class="form-row">
+        <div class="col-4 col-md-3">
+          {{ wtf.form_field(form.privileges) }}
+        </div>
+      </div>
+
+      {{ wtf.form_field(form.active) }}
+      {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
+
+      <button type="button" class="btn btn-danger ml-2 " data-toggle="modal" data-target="#DelModal">
+        Löschen
+      </button>
+
+      <a class="btn btn-dark ml-2" href="{{ url_for('admin.registered_users', page=page) }}" role="button">Zurück</a>
+    </form>
+
+
 {#    <!-- Modalfor confirm delete -->#}
-{#    <div class="modal fade" id="DelModal" tabindex="-1" aria-labelledby="DelModal" aria-hidden="true">#}
-{#      <div class="modal-dialog">#}
-{#        <div class="modal-content">#}
-{#          <div class="modal-header">#}
-{#            <h5 class="modal-title" id="exampleModalLabel">Löschen bestätigen</h5>#}
-{#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#              <span aria-hidden="true">&times;</span>#}
-{#            </button>#}
-{#          </div>#}
-{#          <div class="modal-body">#}
-{#            {{ guest.first_name }} {{ guest.last_name }} wirklich löschen?#}
-{#          </div>#}
-{#          <div class="modal-footer">#}
-{#            <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>#}
-{#            <form action="{{ url_for('admin.guest_delete', slug=guest.slug) }}" method="get">#}
-{#              <button type="submit" class="btn btn-danger">Löschen</button>#}
-{#            </form>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  {% endif %}#}
+    <div class="modal fade" id="DelModal" tabindex="-1" aria-labelledby="DelModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Löschen bestätigen</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Benutzer {{ user.member.first_name }} {{ user.member.last_name }} wirklich löschen?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+            <form action="{{ url_for('admin.user_delete', slug=user.slug, page=page) }}" method="get">
+              <button type="submit" class="btn btn-danger">Löschen</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}

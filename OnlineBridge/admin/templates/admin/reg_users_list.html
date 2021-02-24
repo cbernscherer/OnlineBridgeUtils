@@ -4,10 +4,23 @@
   <div class="jumbotron">
     <h1>Registrerte Benutzer</h1>
 
+    <form action="{{ url_for('admin.get_user') }}" method="get" class="mt-2">
+      <input type="hidden" name="page" value="{{ reg_users.page }}">
+
+      <div class="form-row">
+      <div class="form-group col-10">
+          <label for="getuser">Benutzer suchen</label>
+          <input type="text" class="form-control" id="getuser" name="getuser" required list="userlist" autofocus>
+      </div>
+
+        <button type="submit" class="col btn btn-primary my-3 ml-2">Suchen</button>
+
+      </div>
+    </form>
+
     <h5 class="mt-3">
-      Gesperrte Benutzer sind <span style="color: red">rot</span> geschrieben.
+      Gesperrte Benutzer sind in der Liste <span style="color: red">rot</span> geschrieben.
     </h5>
-{#    <a class="btn btn-primary mt-3" href="{{ url_for('admin.reg_users_new') }}" role="button">Neuer Gast</a>#}
 
   </div>
 
@@ -50,6 +63,21 @@
   </ul>
 
 </nav>
+
+  <datalist id="userlist">
+    {% for user in all_users %}
+      <option>
+        {{ user.member.last_name }} {{ user.member.first_name }}
+        {% if user.member.fed_nr %}
+          {{ user.member.fed_nr }}
+        {% else %}
+          {{ user.member.guest_nr }}
+        {% endif %}
+      </option>
+
+    {% endfor %}
+
+  </datalist>
 
 
 {% endblock %}
