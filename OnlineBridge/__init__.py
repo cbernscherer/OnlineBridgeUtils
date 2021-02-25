@@ -23,7 +23,8 @@ from flask_babelex import Babel
 
 Bootstrap(app)
 
-from OnlineBridge.users.models import User, Role, UserRoles
+from OnlineBridge.users.models import User, Role, UserRoles, Member
+from OnlineBridge.conv_cards.models import playercards, ConvCard
 
 Migrate(app, db)
 

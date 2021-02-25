@@ -1,6 +1,7 @@
 from OnlineBridge import db
 from flask_user import UserMixin
 from utilities import create_random_slug
+from OnlineBridge.conv_cards.models import playercards
 
 class User(db.Model, UserMixin):
 
@@ -58,6 +59,10 @@ class Member(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
 
     user = db.relationship('User', backref='member', uselist=False, cascade="all, delete-orphan")
+
+    # reference to convcards
+    my_cards = db.relationship('ConvCard', secondary=playercards, lazy='subquery', back_populates='players',
+                               cascade="all, delete-orphan")
 
     @property
     def list_name(self):
