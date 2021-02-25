@@ -15,13 +15,13 @@
       {{ form.hidden_tag() }}
       {{ wtf.form_errors(form, hiddens='only') }}
 
-    {% if new_guest %}
-      <div class="form-row">
-        <div class="col-3 col-md-2">
-          {{ wtf.form_field(form.country_code) }}
+      {% if new_guest %}
+        <div class="form-row">
+          <div class="col-3 col-md-2">
+            {{ wtf.form_field(form.country_code) }}
+          </div>
         </div>
-      </div>
-    {% endif %}
+      {% endif %}
 
       <div class="form-row">
         <div class="col">
@@ -34,11 +34,12 @@
 
       {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
 
+      {# intentionally commented out - deletion may cause major issues
       {% if not new_guest %}
         <button type="button" class="btn btn-danger ml-2 " data-toggle="modal" data-target="#DelModal">
           Löschen
         </button>
-      {% endif %}
+      {% endif %}#}
 
       <a class="btn btn-dark ml-2" href="{{ url_for('admin.guests_page') }}" role="button">Zurück</a>
     </form>
@@ -55,7 +56,7 @@
         {% endfor %}
 
       </datalist>
-    {% endif %} 
+    {% endif %}
   {% else %}
     <!-- Modalfor confirm delete -->
     <div class="modal fade" id="DelModal" tabindex="-1" aria-labelledby="DelModal" aria-hidden="true">
