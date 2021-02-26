@@ -13,13 +13,22 @@
   </div>
 
   {% for partner in partners %}
-    <a href="{{ url_for('static', filename='conv_cards/'+partner['card'].filename) }}" target="_blank" class="text-reset">
-      <div class="row {{ loop.cycle('bg-light', 'bg-transparent') }}">
-        <div class="col">
+    <div class="row {{ loop.cycle('bg-light', 'bg-transparent') }}">
+      <div class="col-9">
+        <a href="{{ url_for('static', filename='conv_cards/'+partner['card'].filename) }}" target="_blank" class="text-reset">
           {{ partner['list_name'] }}
-        </div>
+        </a>
       </div>
-    </a>
+
+      <div class="col text-right">
+        {% if current_user.has_roles('Superuser') and current_user.member.id != player.id %}
+          Löschen
+        {% elif own_cards %}
+          Details
+        {% endif %}
+
+      </div>
+    </div>
   {% else %}
     <div class="row">
       <div class="col">
