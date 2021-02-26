@@ -1,9 +1,10 @@
-from OnlineBridge import db
+import os
+from OnlineBridge import db, CONV_CARD_FOLDER
 from utilities.sluggenerator import create_random_slug
 from datetime import datetime
 
 
-playercards = db.table(
+playercards = db.Table(
     'playercards',
     db.Column('member_id', db.Integer, db.ForeignKey('members.id', ondelete='CASCADE'), primary_key=True),
     db.Column('convcards_id', db.Integer, db.ForeignKey('convcards.id', ondelete='CASCADE'), primary_key=True)
@@ -24,7 +25,3 @@ class ConvCard(db.Model):
     @property
     def filename(self):
         return f'cc{self.slug}.pdf'
-
-    def __commit_delete__(self):
-        # delete the file
-        pass

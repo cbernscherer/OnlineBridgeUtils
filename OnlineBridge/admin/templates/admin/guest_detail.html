@@ -34,8 +34,8 @@
 
       {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
 
-      {# intentionally commented out - deletion may cause major issues
-      {% if not new_guest %}
+{#    intentionally commented out - deletion may cause major issues#}
+{#      {% if not new_guest %}
         <button type="button" class="btn btn-danger ml-2 " data-toggle="modal" data-target="#DelModal">
           Löschen
         </button>

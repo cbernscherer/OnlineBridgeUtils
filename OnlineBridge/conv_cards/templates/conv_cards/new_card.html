@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1>Neue Konventionskarte</h1>
+
+    {{ wtf.quick_form(form, extra_classes=' mt-3 ', button_map={'submit':'primary'}) }}
+
+  </div>
+
+  <datalist id="memberlist">
+    {% for possible_partner in possible_partners %}
+      <option>
+        {{ possible_partner.last_name }} {{ possible_partner.first_name }}
+        {% if possible_partner.fed_nr %}
+          {{ possible_partner.fed_nr }}
+        {% else %}
+          {{ possible_partner.guest_nr }}
+        {% endif %}
+      </option>
+
+    {% endfor %}
+
+  </datalist>
+{% endblock %}

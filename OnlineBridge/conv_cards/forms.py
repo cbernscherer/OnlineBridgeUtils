@@ -9,7 +9,8 @@ class NewCardForm(FlaskForm):
         'autofocus': True, 'list': 'memberlist'
     })
 
-    conv_card = FileField('Konventionskarte (PDF)', validators=[InputRequired()])
+    conv_card = FileField('Konventionskarte (PDF), maximal 2MB', validators=[InputRequired()],
+                          render_kw={'accept': '.pdf'})
     submit = SubmitField('Hochladen')
 
     def __init__(self, *args, **kwargs):
@@ -20,7 +21,7 @@ class NewCardForm(FlaskForm):
         if not self.conv_card.data:
             raise ValidationError('keine Datei ausgewählt')
 
-        if (len(self.conv_card.data.filename) < 4) or (self.conv_card.data.filename[-4:].lower() != '.pdf'):
+        if (len(self.conv_card.data.filename) < 5) or (self.conv_card.data.filename[-4:].lower() != '.pdf'):
             raise ValidationError(f'Keine PDF-Datei')
 
     def validate_partner(self, field):

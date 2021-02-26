@@ -61,8 +61,7 @@ class Member(db.Model):
     user = db.relationship('User', backref='member', uselist=False, cascade="all, delete-orphan")
 
     # reference to convcards
-    my_cards = db.relationship('ConvCard', secondary=playercards, lazy='subquery', back_populates='players',
-                               cascade="all, delete-orphan")
+    my_cards = db.relationship('ConvCard', secondary=playercards, lazy='subquery', back_populates='players')
 
     @property
     def list_name(self):

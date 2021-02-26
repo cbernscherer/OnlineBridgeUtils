@@ -1,7 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from OnlineBridge.config import ConfigApp
+import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+CONV_CARD_FOLDER = os.path.join(basedir, 'static', 'conv_cards')
 
 # for federation members file upload
 MEMBER_FILENAME = 'SpoXls.xls'
