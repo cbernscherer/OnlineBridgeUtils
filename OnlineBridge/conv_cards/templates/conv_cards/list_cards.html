@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1>
+      {% if own_cards %}
+        Meine Konventionskarten
+      {% else %}
+        Konventionskarten von {{ player.first_name }} {{ player.last_name }}
+      {% endif %}
+    </h1>
+
+  </div>
+
+  {% for partner in partners %}
+    <a href="{{ url_for('static', filename='conv_cards/'+partner['card'].filename) }}" target="_blank" class="text-reset">
+      <div class="row {{ loop.cycle('bg-light', 'bg-transparent') }}">
+        <div class="col">
+          {{ partner['list_name'] }}
+        </div>
+      </div>
+    </a>
+  {% else %}
+    <div class="row">
+      <div class="col">
+        Keine Konventionskarten gefunden
+      </div>
+    </div>
+  {% endfor %}
+
+
+<nav aria-label='cards aria' class="mt-2">
+  <ul class="pagination justify-content-center">
+    {% for page_num in pages  %}
+        <li class='page-item {% if page == page_num %}disabled{% endif %}'>
+          <a class="page-link" href="{{ url_for('conv_cards.list_cards',page=page_num, slug=slug) }}">{{ page_num}}</a>
+        </li>
+    {% endfor %}
+  </ul>
+
+</nav>
+
+
+{% endblock %}

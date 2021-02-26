@@ -1,5 +1,5 @@
 from os import path
-from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
 from OnlineBridge import db, CONV_CARD_FOLDER
 from flask_user import current_user, login_required, roles_required
 from OnlineBridge.users.models import Member
@@ -72,6 +72,8 @@ def list_cards():
     if slug == '':
         member = current_user.member
     else:
+        if not current_user.has_roles('Director'):
+            abort(403)
         own_cards = False
         member = Member.query.filter_by(slug=slug).first_or_404()
 
@@ -80,7 +82,7 @@ def list_cards():
     for card in member.my_cards:
         for player in card.players:
             if player.id != member.id:
-                partners.append({'list_name': player.list_name, 'card_slag': card.slug})
+                partners.append({'list_name': player.list_name, 'card': card})
 
     partners.sort(key=lambda p:p['list_name'])
 
@@ -91,5 +93,15 @@ def list_cards():
     if len(partners) > 0:
         partners = partners[(page-1)*per_page:page*per_page]
 
-    pages = range(1,num_pages)
-    return str(partners)
+    pages = range(1, num_pages+1)
+
+    context = {
+        'pages': pages,
+        'page': page,
+        'partners': partners,
+        'player': member,
+        'own_cards': own_cards,
+        'num_pages': num_pages,
+        'slug': slug
+    }
+    return render_template('list_cards.html', **context)
