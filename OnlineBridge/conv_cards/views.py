@@ -3,8 +3,9 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash
 from OnlineBridge import db, CONV_CARD_FOLDER
 from flask_user import current_user, login_required, roles_required
 from OnlineBridge.users.models import Member
-from OnlineBridge.conv_cards.models import ConvCard
+from OnlineBridge.conv_cards.models import ConvCard, playercards
 from OnlineBridge.conv_cards.forms import NewCardForm
+from math import ceil
 
 conv_cards = Blueprint('conv_cards', __name__, template_folder='templates/conv_cards')
 
@@ -54,3 +55,41 @@ def new_card():
     }
 
     return render_template('new_card.html', **context)
+
+
+@conv_cards.route('/list_cards')
+@login_required
+def list_cards():
+    per_page = 15
+
+    # get arguments
+    page = request.args.get('page', 1, type=int)
+    slug = request.args.get('slug', '', type=str)
+
+    own_cards = True
+
+    # retrieve player
+    if slug == '':
+        member = current_user.member
+    else:
+        own_cards = False
+        member = Member.query.filter_by(slug=slug).first_or_404()
+
+    # retrieve partners
+    partners = []
+    for card in member.my_cards:
+        for player in card.players:
+            if player.id != member.id:
+                partners.append({'list_name': player.list_name, 'card_slag': card.slug})
+
+    partners.sort(key=lambda p:p['list_name'])
+
+    # prepare pagination
+    num_pages = ceil(len(partners) / per_page)
+    page = min(page, num_pages)
+    page = max(page, 1)
+    if len(partners) > 0:
+        partners = partners[(page-1)*per_page:page*per_page]
+
+    pages = range(1,num_pages)
+    return str(partners)
