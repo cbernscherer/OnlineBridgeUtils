@@ -38,3 +38,29 @@ class NewCardForm(FlaskForm):
 
         if self.partner_found is None:
             raise ValidationError('der Partner konnte nicht gefunden werden')
+
+
+class SearchPlayerForm(FlaskForm):
+    player = StringField('Spieler', validators=[InputRequired(), Length(max=128)], render_kw={
+        'autofocus': True, 'list': 'memberlist'
+    })
+    submit = SubmitField('Suchen')
+
+    def __init__(self, *args, **kwargs):
+        super(SearchPlayerForm, self).__init__(*args, **kwargs)
+        self.player_found = None
+
+    def validate_player(self, field):
+        if len(self.player.data) == 0:
+            raise ValidationError('kein Spieler angegeben')
+
+        player_nr = str(self.player.data).split()[-1]
+        self.player_found = None
+
+        if player_nr.isdigit():
+            self.player_found = Member.query.filter_by(fed_nr=int(player_nr)).one_or_none()
+        else:
+            self.player_found = Member.query.filter_by(guest_nr=player_nr).one_or_none()
+
+        if self.player_found is None:
+            raise ValidationError('der Spieler konnte nicht gefunden werden')

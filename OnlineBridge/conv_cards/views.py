@@ -3,8 +3,8 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash,
 from OnlineBridge import db, CONV_CARD_FOLDER
 from flask_user import current_user, login_required, roles_required
 from OnlineBridge.users.models import Member
-from OnlineBridge.conv_cards.models import ConvCard, playercards
-from OnlineBridge.conv_cards.forms import NewCardForm
+from OnlineBridge.conv_cards.models import ConvCard
+from OnlineBridge.conv_cards.forms import NewCardForm, SearchPlayerForm
 from math import ceil
 
 conv_cards = Blueprint('conv_cards', __name__, template_folder='templates/conv_cards')
@@ -105,3 +105,32 @@ def list_cards():
         'slug': slug
     }
     return render_template('list_cards.html', **context)
+
+
+@conv_cards.route('/search_player', methods=['GET', 'POST'])
+@roles_required('Director')
+def search_player():
+    if ConvCard.query.count() == 0:
+        flash('Noch keine Konventionskarten vorhanden', category='info')
+        return redirect(url_for('core.index'))
+
+    form = SearchPlayerForm()
+    if request.method == "POST" and form.validate_on_submit():
+        return redirect(url_for('conv_cards.list_cards', slug=form.player_found.slug))
+
+    # get players with convention cards
+    players = []
+    for card in ConvCard.query.all():
+        for player in card.players:
+            players.append(player.id)
+
+    players = set(players)
+
+    card_players = Member.query.filter(Member.id.in_(players)).\
+        order_by(Member.last_name.asc(), Member.first_name.asc()).all()
+
+    context = {
+        'form': form,
+        'players': card_players
+    }
+    return render_template('search_player.html', **context)

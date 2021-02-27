@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1>Konventionskarten für einen Spieler anzeigen</h1>
+
+    <p class="mt-3">
+      Um den Spieler zu wählen, schreib einfach einen beliebigen Teil seines Namens und wähl ihn dann aus der Liste,
+      die sich öffnet, sodass er komplett mit der Kennung im Feld steht.
+    </p>
+
+    {{ wtf.quick_form(form, extra_classes=' mt-3 ', button_map={'submit':'primary'}) }}
+
+  </div>
+
+  <datalist id="memberlist">
+    {% for player in players %}
+      <option>
+        {{ player.last_name }} {{ player.first_name }}
+        {% if player.fed_nr %}
+          {{ player.fed_nr }}
+        {% else %}
+          {{ player.guest_nr }}
+        {% endif %}
+      </option>
+
+    {% endfor %}
+
+  </datalist>
+{% endblock %}

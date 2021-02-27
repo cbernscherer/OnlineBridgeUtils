@@ -70,7 +70,7 @@
             <a class="dropdown-item" href="{{ url_for('conv_cards.new_card') }}">neue Karte</a>
             {% if current_user.has_roles('Director') %}
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Karten eines Spielers</a>
+              <a class="dropdown-item" href="{{ url_for('conv_cards.search_player') }}">Karten eines Spielers</a>
             {% endif %}
           </div>
         </li>
