@@ -44,7 +44,7 @@ def new_card():
                 # save file
                 file.save(path.join(CONV_CARD_FOLDER, conv_card.filename))
 
-                return redirect(url_for('core.index'))
+                return redirect(url_for('conv_cards.list_cards'))
 
     possible_partners = Member.query.filter(Member.id.notin_(exclude_ids)).\
         order_by(Member.last_name.asc(), Member.first_name.asc()).all()
@@ -60,7 +60,7 @@ def new_card():
 @conv_cards.route('/list_cards')
 @login_required
 def list_cards():
-    per_page = 15
+    per_page = 12
 
     # get arguments
     page = request.args.get('page', 1, type=int)

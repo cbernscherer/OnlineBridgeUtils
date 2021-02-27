@@ -10,6 +10,12 @@
       {% endif %}
     </h1>
 
+    {% if own_cards %}
+      <a href="{{ url_for('conv_cards.new_card') }}" class="mt-3 btn btn-primary">Neue Karte</a>
+    {% else %}
+
+    {% endif %}
+
   </div>
 
   {% for partner in partners %}
@@ -21,7 +27,7 @@
       </div>
 
       <div class="col text-right">
-        {% if current_user.has_roles('Superuser') and current_user.member.id != player.id %}
+        {% if current_user.has_roles('Superuser') and not own_cards %}
           Löschen
         {% elif own_cards %}
           Details
