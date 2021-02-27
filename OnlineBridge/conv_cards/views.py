@@ -1,10 +1,10 @@
-from os import path
+import os
 from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
 from OnlineBridge import db, CONV_CARD_FOLDER
 from flask_user import current_user, login_required, roles_required
 from OnlineBridge.users.models import Member
 from OnlineBridge.conv_cards.models import ConvCard
-from OnlineBridge.conv_cards.forms import NewCardForm, SearchPlayerForm
+from OnlineBridge.conv_cards.forms import NewCardForm, SearchPlayerForm, ConfDeleteForm
 from math import ceil
 
 conv_cards = Blueprint('conv_cards', __name__, template_folder='templates/conv_cards')
@@ -42,7 +42,7 @@ def new_card():
                 db.session.commit()
 
                 # save file
-                file.save(path.join(CONV_CARD_FOLDER, conv_card.filename))
+                file.save(os.path.join(CONV_CARD_FOLDER, conv_card.filename))
 
                 return redirect(url_for('conv_cards.list_cards'))
 
@@ -134,3 +134,24 @@ def search_player():
         'players': card_players
     }
     return render_template('search_player.html', **context)
+
+
+@conv_cards.route('/<string:slug>/<pl_slug>/conf_delete', methods=['GET', 'POST'])
+@roles_required('Superuser')
+def conf_delete(slug, pl_slug):
+    card = ConvCard.query.filter_by(slug=slug).first_or_404()
+
+    form = ConfDeleteForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        filename = card.filename
+
+        db.session.delete(card)
+        db.session.commit()
+
+        os.remove(os.path.join(CONV_CARD_FOLDER, filename))
+
+        flash('Karte gelöscht', 'succes')
+        return redirect(url_for('conv_cards.list_cards', slug=pl_slug))
+
+    return render_template('conf_delete.html', form=form, card=card, pl_slug=pl_slug)

@@ -64,3 +64,7 @@ class SearchPlayerForm(FlaskForm):
 
         if self.player_found is None:
             raise ValidationError('der Spieler konnte nicht gefunden werden')
+
+
+class ConfDeleteForm(FlaskForm):
+    submit = SubmitField('Löschen')

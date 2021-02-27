@@ -28,7 +28,7 @@
 
       <div class="col text-right">
         {% if current_user.has_roles('Superuser') and not own_cards %}
-          Löschen
+          <a href="{{ url_for('conv_cards.conf_delete', slug=partner['card'].slug, pl_slug=slug) }}" class="text-reset">Löschen</a>
         {% elif own_cards %}
           Details
         {% endif %}
