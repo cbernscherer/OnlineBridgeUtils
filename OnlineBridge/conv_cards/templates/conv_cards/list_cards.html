@@ -12,7 +12,9 @@
 
     {% if own_cards %}
       <a href="{{ url_for('conv_cards.new_card') }}" class="mt-3 btn btn-primary">Neue Karte</a>
-    {% else %}
+      <p class="mt-3">Durch Klick auf den Namen des Partners wird die Konventionskarte angezeigt,
+      mit einem Rechtsklick öffnet sich ein Kontextmenü, in dem du die Adresse kopieren kannst.
+      Diese kannst du anschließend in den Chat einfügen und so den Gegnern zur Verfügung stellen.</p>
 
     {% endif %}
 
@@ -30,7 +32,7 @@
         {% if current_user.has_roles('Superuser') and not own_cards %}
           <a href="{{ url_for('conv_cards.conf_delete', slug=partner['card'].slug, pl_slug=slug) }}" class="text-reset">Löschen</a>
         {% elif own_cards %}
-          Details
+          <a href="{{ url_for('conv_cards.detail', slug=partner['card'].slug) }}" class="text-reset">Details</a>
         {% endif %}
 
       </div>

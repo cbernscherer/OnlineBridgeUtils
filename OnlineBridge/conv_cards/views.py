@@ -4,8 +4,9 @@ from OnlineBridge import db, CONV_CARD_FOLDER
 from flask_user import current_user, login_required, roles_required
 from OnlineBridge.users.models import Member
 from OnlineBridge.conv_cards.models import ConvCard
-from OnlineBridge.conv_cards.forms import NewCardForm, SearchPlayerForm, ConfDeleteForm
+from OnlineBridge.conv_cards.forms import NewCardForm, SearchPlayerForm, ConfDeleteForm, ReplaceCardForm
 from math import ceil
+from datetime import datetime
 
 conv_cards = Blueprint('conv_cards', __name__, template_folder='templates/conv_cards')
 
@@ -60,7 +61,7 @@ def new_card():
 @conv_cards.route('/list_cards')
 @login_required
 def list_cards():
-    per_page = 12
+    per_page = 8
 
     # get arguments
     page = request.args.get('page', 1, type=int)
@@ -75,6 +76,7 @@ def list_cards():
         if not current_user.has_roles('Director'):
             abort(403)
         own_cards = False
+        per_page = 15
         member = Member.query.filter_by(slug=slug).first_or_404()
 
     # retrieve partners
@@ -151,7 +153,60 @@ def conf_delete(slug, pl_slug):
 
         os.remove(os.path.join(CONV_CARD_FOLDER, filename))
 
-        flash('Karte gelöscht', 'succes')
+        flash('Karte gelöscht', 'success')
         return redirect(url_for('conv_cards.list_cards', slug=pl_slug))
 
     return render_template('conf_delete.html', form=form, card=card, pl_slug=pl_slug)
+
+
+@conv_cards.route('/<string:slug>/detail', methods=['GET', 'POST'])
+@login_required
+def detail(slug):
+    card = ConvCard.query.filter_by(slug=slug).first_or_404()
+    if current_user.member not in card.players:
+        abort(403)
+
+    form = ReplaceCardForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        if 'conv_card' not in request.files:
+            flash('Fileanhang fehlt', 'error')
+
+        else:
+            file = request.files['conv_card']
+
+            # save to database
+            card.uploaded = datetime.now()
+            db.session.add(card)
+            db.session.commit()
+
+            # save file
+            file.save(os.path.join(CONV_CARD_FOLDER, card.filename))
+
+            flash('Karte ersetzt', 'success')
+            return redirect(url_for('conv_cards.detail', slug=slug))
+
+    context = {
+        'form': form,
+        'card': card
+    }
+
+    return render_template('detail.html', **context)
+
+
+@conv_cards.route('/<string:slug>/delete', methods=['GET'])
+@login_required
+def delete(slug):
+    card = ConvCard.query.filter_by(slug=slug).first_or_404()
+    if current_user.member not in card.players:
+        abort(403)
+
+    filename = card.filename
+
+    db.session.delete(card)
+    db.session.commit()
+
+    os.remove(os.path.join(CONV_CARD_FOLDER, filename))
+
+    flash('Karte gelöscht', 'success')
+    return redirect(url_for('conv_cards.list_cards'))

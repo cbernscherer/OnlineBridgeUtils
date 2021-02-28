@@ -17,7 +17,7 @@ class ConvCard(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     slug = db.Column(db.String(24), unique=True, nullable=False, index=True, default=create_random_slug(24))
-    uploaded = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    uploaded = db.Column(db.DateTime(), default=datetime.now, nullable=False)
 
     # reference to members
     players = db.relationship('Member', secondary=playercards, lazy='subquery', back_populates='my_cards')
