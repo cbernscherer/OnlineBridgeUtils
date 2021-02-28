@@ -36,7 +36,7 @@ class ConfigAuth:
 
 class ConfigApp(ConfigMail, ConfigAuth):
 
-    TESTING = True
+    TESTING = False
     MAX_CONTENT_LENGTH = 2 * 1024 * 1024 # maximum 2MB
 
     # Key for Forms
