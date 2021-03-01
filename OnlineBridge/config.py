@@ -52,6 +52,8 @@ class ConfigApp(ConfigMail, ConfigAuth):
 
     ##########################################
 
+    SQLALCHEMY_POOL_RECYCLE = 200
+
     @property
     def SQLALCHEMY_DATABASE_URI(self):
         return 'sqlite:///' + os.path.join(basedir, 'data.sqlite')

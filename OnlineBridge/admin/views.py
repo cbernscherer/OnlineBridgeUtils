@@ -142,7 +142,7 @@ def guest_delete(slug):
 @admin.route('/registered_users')
 @roles_required('Superuser')
 def registered_users():
-    per_page = 8
+    per_page = 15
     page = request.args.get('page', 1, type=int)
 
     last_page = ceil(User.query.filter(User.id.__ne__(current_user.id)).count() / per_page)
