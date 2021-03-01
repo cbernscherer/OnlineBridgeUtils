@@ -22,7 +22,7 @@
 
   {% for partner in partners %}
     <div class="row {{ loop.cycle('bg-light', 'bg-transparent') }}">
-      <div class="col-9">
+      <div class="col-7">
         <a href="{{ url_for('static', filename='conv_cards/'+partner['card'].filename) }}" target="_blank" class="text-reset">
           {{ partner['list_name'] }}
         </a>
@@ -32,7 +32,7 @@
         {% if current_user.has_roles('Superuser') and not own_cards %}
           <a href="{{ url_for('conv_cards.conf_delete', slug=partner['card'].slug, pl_slug=slug) }}" class="text-reset">Löschen</a>
         {% elif own_cards %}
-          <a href="{{ url_for('conv_cards.detail', slug=partner['card'].slug) }}" class="text-reset">Details</a>
+          <a href="{{ url_for('conv_cards.detail', slug=partner['card'].slug) }}" class="text-reset">Ändern / Löschen</a>
         {% endif %}
 
       </div>

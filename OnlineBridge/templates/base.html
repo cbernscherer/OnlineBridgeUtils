@@ -34,7 +34,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark myNavBar">
-  <a class="navbar-brand" href="{{ url_for('core.index') }}">Home</a>
+  <a class="navbar-brand" href="{{ url_for('core.index') }}"><span class="myNavColor">Home</span></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -46,7 +46,7 @@
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
              aria-expanded="false">
-            Admin
+            <span class="myNavColor">Admin</span>
           </a>
           <div class="dropdown-menu">
             {% if current_user.has_roles('Superuser') %}
@@ -63,7 +63,7 @@
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
              aria-expanded="false">
-            Konventionskarten
+            <span class="myNavColor">Konventionskarten</span>
           </a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{{ url_for('conv_cards.list_cards') }}">meine Karten</a>
@@ -81,11 +81,14 @@
       <li class="nav-item dropdown mr-3">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
            aria-expanded="false">
-          {% if current_user.is_authenticated %}
-            {{ current_user.first_name }}
-          {% else %}
-            Benutzer
-          {% endif %}
+          <span class="myNavColor">
+            {% if current_user.is_authenticated %}
+              {{ current_user.first_name }}
+            {% else %}
+              Benutzer
+            {% endif %}
+
+          </span>
         </a>
         <div class="dropdown-menu">
           {% if current_user.is_authenticated %}
@@ -101,7 +104,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('core.about') }}">About</a>
+        <a class="nav-link" href="{{ url_for('core.about') }}"><span class="myNavColor">About</span></a>
       </li>
 
     </ul>
@@ -150,16 +153,16 @@
     <ul class="navbar-nav mr-auto">
 
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('core.license') }}">&copy;2021 Christian Bernscherer</a>
+        <a class="nav-link" href="{{ url_for('core.license') }}"><span class="myNavColor">&copy;2021 Christian Bernscherer</span></a>
       </li>
     </ul>
 
     <ul class="navbar-nav flex-row mr-4">
       <li class="nav-item mr-2">
-        <a class="nav-link" href="{{ url_for('core.impressum') }}">Impressum</a>
+        <a class="nav-link" href="{{ url_for('core.impressum') }}"><span class="myNavColor">Impressum</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('core.data_protection') }}">Datenschutz</a>
+        <a class="nav-link" href="{{ url_for('core.data_protection') }}"><span class="myNavColor">Datenschutz</span></a>
       </li>
     </ul>
 

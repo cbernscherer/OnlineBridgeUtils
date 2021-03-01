@@ -55,5 +55,8 @@ class ConfigApp(ConfigMail, ConfigAuth):
     @property
     def SQLALCHEMY_DATABASE_URI(self):
         return 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+        return 'mysql://{}:{}@{}/{}'.format(
+            os.environ['DB_USER'],os.environ['DB_PASSWORD'], os.environ['DB_HOST'],os.environ['DB_NAME']
+        )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
