@@ -50,7 +50,7 @@ def populate():
                 db.session.commit()
 
     # assign superuser
-    user = User.query.filter_by(email=app.config['MAIL_USERNAME']).first()
+    user = User.query.filter_by(email=os.environ['SUPERUSER']).first()
     if user:
         user.roles = Role.query.all()
         db.session.add(user)

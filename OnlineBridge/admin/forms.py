@@ -40,7 +40,7 @@ class GuestDetailForm(FlaskForm):
 
 
 class UserDetailForm(FlaskForm):
-    privileges = SelectField('Berechtigunge', coerce=int, render_kw={'autofocus': True}, choices= [
+    privileges = SelectField('Berechtigungen', coerce=int, render_kw={'autofocus': True}, choices= [
         (1, 'Player'), (2, 'Director'), (3, 'Admin'), (4, 'Superuser')
     ])
     active = BooleanField('aktiv', widget=CheckboxInput())
