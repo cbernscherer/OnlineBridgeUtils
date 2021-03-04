@@ -129,3 +129,7 @@ class MyEditUserProfileForm(EditUserProfileForm):
         self.first_name.label.text = 'Vorname'
         self.last_name.label.text = 'Familienname'
         self.submit.label.text = 'Speichern'
+
+    def validate_last_name(self, field):
+        self.first_name.data = self.first_name.data.strip().title()
+        self.last_name.data = self.last_name.data.strip().title()
