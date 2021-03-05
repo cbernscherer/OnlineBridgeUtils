@@ -48,8 +48,10 @@ from OnlineBridge.error_pages.handlers import error_pages
 from OnlineBridge.core.views import core
 from OnlineBridge.admin.views import admin
 from OnlineBridge.conv_cards.views import conv_cards
+from OnlineBridge.tournadmin.views import tournadmin
 
 app.register_blueprint(error_pages)
 app.register_blueprint(core)
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(conv_cards, url_prefix='/conv_cards')
+app.register_blueprint(tournadmin, url_prefix='/tournaments/admin')
