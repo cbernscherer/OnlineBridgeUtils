@@ -1,33 +1,36 @@
 # tournadmin
-
 from OnlineBridge import db
 
 
-class ParameterType(db.Model):
+class VPScale(db.Model):
 
-    __tablename__ = 'parametertypes'
+    __tablename__ = 'vpscales'
 
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(64), unique=True, nullable=False)
-
-    parameters = db.relationship('Parameter', backref='parameter_type', lazy=True)
 
     def __repr__(self):
         return self.name
 
 
-class Parameter(db.Model):
+class TimeDisplay(db.Model):
 
-    __tablename__ = 'parameters'
+    __tablename__ = 'timedisplays'
 
     id = db.Column(db.Integer(), primary_key=True)
-    parameter_type_id = db.Column(db.Integer() ,db.ForeignKey(ParameterType.id, ondelete='CASCADE'))
+    name = db.Column(db.String(64), unique=True, nullable=False)
 
-    value = db.Column(db.Integer(), nullable=False)
-    name = db.Column(db.String(64), nullable=False)
+    def __repr__(self):
+        return self.name
 
-    unique_type_value = db.UniqueConstraint('parameter_type_id', 'value')
-    unique_type_name = db.UniqueConstraint('parameter_type_id', 'name')
+
+class ScoringMethod(db.Model):
+
+    __tablename__ = 'scoringmethods'
+
+    id = db.Column(db.Integer(), primary_key=True)
+    tournament_type = db.Column(db.String(1), default='T', nullable=False)  # P(airs) T(eams)
+    name = db.Column(db.String(64), unique=True, nullable=False)
 
     def __repr__(self):
         return self.name
