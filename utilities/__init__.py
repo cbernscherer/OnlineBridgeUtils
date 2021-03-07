@@ -1,1 +1,2 @@
 from utilities.sluggenerator import create_random_slug
+from utilities.pagination import pagination_setup
