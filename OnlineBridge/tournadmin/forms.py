@@ -32,7 +32,7 @@ class ParameterForm(FlaskForm):
         parameter = self.model.query.filter_by(id=self.id.data).one_or_none()
 
         if self.new_param and parameter:
-            raise ValidationError('Diese ID existiert schon')
+            raise ValidationError('Dieser Schlüssel existiert schon')
 
     def validate_name(self, field):
         parameter = self.model.query.filter_by(self.model.id.__ne__(self.id.data)).\
