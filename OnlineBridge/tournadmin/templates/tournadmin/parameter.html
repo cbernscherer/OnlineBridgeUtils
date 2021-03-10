@@ -22,9 +22,22 @@
           {{ wtf.form_field(form.name) }}
         </div>
       </div>
-      
+
       {% if show_tourn_type %}
-        {{ wtf.form_field(form.tournament_type) }}
+{#        {{ wtf.form_field(form.tournament_type) }}#}
+        <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
+          <label class="btn btn-secondary active">
+            <input id="tournament_type-0" name="tournament_type" type="radio" value="P"
+            {% if not new_param and this_param.tournament_type=='P' %} checked {% endif %}
+            > Paar
+          </label>
+          <label class="btn btn-secondary">
+            <input id="tournament_type-1" name="tournament_type" type="radio" value="T"
+            {% if new_param or this_param.tournament_type=='T' %} checked {% endif %}
+            > Team
+          </label>
+        </div>
+        <br>
       {% endif %}
 
       {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
