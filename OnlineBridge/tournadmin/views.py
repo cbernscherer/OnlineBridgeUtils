@@ -15,7 +15,7 @@ def new_vpscale():
     per_page = 10
     page, last_page = pagination_setup(per_page, VPScale)
 
-    form = ParameterForm(True, VPScale)
+    form = ParameterForm(True, VPScale, -1)
 
     if request.method == "POST" and form.validate_on_submit():
         vp_scale = VPScale(id=form.id.data, name=form.name.data)
@@ -29,10 +29,11 @@ def new_vpscale():
     context = {
         'form': form,
         'parameters': vp_scales,
+        'show_tourn_type': False,
         'new_param': True,
-        'param_type': ('VP Skala', 'VP Skalen')
+        'param_type': ('VP Skala', 'VP Skalen', 'vp_scale')
     }
-    return render_template('', **context)
+    return render_template('parameter.html', **context)
 
 
 @tournadmin.route('/vpscale/<int:id>/update', methods=['GET', 'POST'])
@@ -43,7 +44,7 @@ def update_vpscale(id):
 
     vp_scale = VPScale.query.filter_by(id=id).first_or_404()
 
-    form = ParameterForm(True, VPScale)
+    form = ParameterForm(False, VPScale, vp_scale.id)
 
     if request.method == "POST" and form.validate_on_submit():
         vp_scale.name = form.name.data
@@ -53,15 +54,17 @@ def update_vpscale(id):
         return redirect(url_for('tournadmin.new_vpscale', page=page))
 
     elif request.method == 'GET':
-        form.id.data = vp_scale.id
         form.name.data = vp_scale.name
 
+    form.id.data = vp_scale.id
     vp_scales = VPScale.query.order_by(VPScale.id.asc()).paginate(page=page, per_page=per_page)
 
     context = {
         'form': form,
         'parameters': vp_scales,
+        'this_param': vp_scale,
+        'show_tourn_type': False,
         'new_param': False,
-        'param_type': ('VP Skala', 'VP Skalen')
+        'param_type': ('VP Skala', 'VP Skalen', 'vp_scale')
     }
-    return render_template('', **context)
+    return render_template('parameter.html', **context)
