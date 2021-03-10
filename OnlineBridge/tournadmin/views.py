@@ -49,7 +49,7 @@ def new_param(param_type):
         db.session.add(parameter)
         db.session.commit()
 
-        return redirect(url_for('tournadmin.new_param', page=page))
+        return redirect(url_for('tournadmin.new_param',param_type=param_type, page=page))
 
     parameters = model.query.order_by(model.id.asc()).paginate(page=page, per_page=per_page)
 
@@ -57,7 +57,7 @@ def new_param(param_type):
         'form': form,
         'parameters': parameters,
         'show_tourn_type': show_tourn_type,
-        'new_param': False,
+        'new_param': True,
         'param_type': param_type_str
     }
     return render_template('parameter.html', **context)

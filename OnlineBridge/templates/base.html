@@ -85,7 +85,9 @@
           <div class="dropdown-menu">
             {% if current_user.has_roles('Superuser') %}
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{{ url_for('tournadmin.new_vpscale') }}">VP-Skalen</a>
+              <a class="dropdown-item" href="{{ url_for('tournadmin.new_param', param_type='vp_scale') }}">VP-Skalen</a>
+              <a class="dropdown-item" href="{{ url_for('tournadmin.new_param', param_type='time_display') }}">Zeitanzeigen</a>
+              <a class="dropdown-item" href="{{ url_for('tournadmin.new_param', param_type='scoring_method') }}">Scoremethoden</a>
             {% endif %}
           </div>
         </li>
