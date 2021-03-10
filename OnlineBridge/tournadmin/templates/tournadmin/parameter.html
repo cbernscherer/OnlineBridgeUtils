@@ -98,7 +98,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
             {% if this_param %}
-              <form action="#" method="get">
+              <form action="{{ url_for('tournadmin.param_delete', id=this_param.id, param_type=param_type[2]) }}" method="get">
                 <button type="submit" class="btn btn-danger">Löschen</button>
               </form>
             {% endif %}

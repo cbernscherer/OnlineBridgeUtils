@@ -68,3 +68,26 @@ def update_vpscale(id):
         'param_type': ('VP Skala', 'VP Skalen', 'vp_scale')
     }
     return render_template('parameter.html', **context)
+
+
+@tournadmin.route('/parameter/<string:param_type>/<int:id>/delete', methods=['GET'])
+@roles_required('Superuser')
+def param_delete(param_type, id):
+    if request.method == 'GET':
+        model = None
+
+        if param_type == 'vp_scale':
+            model = VPScale
+        elif param_type == 'time_display':
+            model = TimeDisplay
+        elif param_type =='scoring_method':
+            model = ScoringMethod
+
+        if not model:
+            abort(404)
+
+        parameter = model.query.filter_by(id=id).first_or_404()
+        db.session.delete(parameter)
+        db.session.commit()
+
+    return redirect(url_for('tournadmin.new_vpscale'))
