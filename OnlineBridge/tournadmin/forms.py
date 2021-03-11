@@ -8,7 +8,10 @@ from OnlineBridge.users.models import Role
 
 class ParameterForm(FlaskForm):
     id = IntegerField('Schlüssel')
+    name = StringField('Bezeichnung', validators=[InputRequired(), Length(message='Maximal 64 Zeichen', max=64)])
+    tournament_type = RadioField('Turniertyp', choices=[('P', 'Paar'), ('T', 'Team')], default='T')
 
+    submit = SubmitField('Speichern')
 
     def __init__(self, new_param:bool, model, param_id, *args, **kwargs):
         super(ParameterForm, self).__init__(*args, **kwargs)
