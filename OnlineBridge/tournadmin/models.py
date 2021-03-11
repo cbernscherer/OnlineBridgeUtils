@@ -55,6 +55,11 @@ class Tournament(db.Model):
     last_name_first = db.Column(db.Boolean(), default=False, nullable=False)
     last_name_cap = db.Column(db.Boolean(), default=False, nullable=False)
 
+    sessions = db.relationship('Session', backref='tournament', lazy='dynamic')
+
+    director_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    ass_director_id = db.Column(db.Integer(), index=True)
+
 
 class Session(db.Model):
 
@@ -88,3 +93,6 @@ class Session(db.Model):
     opening_lead = db.Column(db.SmallInteger(), default=10)
     dummy = db.Column(db.SmallInteger(), default=0)
     third_hand = db.Column(db.SmallInteger(), default=0)
+
+    tournament_id = db.Column(db.BigInteger(), db.ForeignKey(Tournament.id, ondelete='CASCADE'), nullable=False)
+    tournament_session_unique = db.UniqueConstraint('tournament_id', 'session_nr')

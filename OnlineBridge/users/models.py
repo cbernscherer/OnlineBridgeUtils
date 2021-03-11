@@ -24,6 +24,7 @@ class User(db.Model, UserMixin):
 
     # Relationships
     roles = db.relationship('Role', secondary='user_roles')
+    director_of = db.relationship('Tournament', backref='director', lazy='dynamic')
 
     # federation members
     member_id = db.Column(db.Integer(), db.ForeignKey('members.id', ondelete='CASCADE'))
