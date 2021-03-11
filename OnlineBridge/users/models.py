@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     slug = db.Column(db.String(24), nullable=False, unique=True, index=True, default=create_random_slug(24))
 
     # Relationships
-    roles = db.relationship('Role', secondary='user_roles')
+    roles = db.relationship('Role', secondary='user_roles', backref='users', lazy=True)
     director_of = db.relationship('Tournament', backref='director', lazy='dynamic')
 
     # federation members
