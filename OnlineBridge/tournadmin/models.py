@@ -45,6 +45,8 @@ class Tournament(db.Model):
     id = db.Column(db.BigInteger(), primary_key=True)
     slug = db.Column(db.String(24), nullable=False, index=True, default=create_random_slug(24))
 
+    club_id = db.Column(db.Integer(), db.ForeignKey('clubs.id', ondelete='CASCADE'))
+
     name = db.Column(db.String(50), nullable=False)
     tournament_type = db.Column(db.String(1), nullable=False, default='P') # P Pairs T Teams
     info = db.Column(db.String(128)) # URL
@@ -75,8 +77,6 @@ class Session(db.Model):
 
     # RealBridge parameters
     name = db.Column(db.String(50))
-    club_name = db.Column(db.String(50))
-    club_id = db.Column(db.String(20))
     scoring_method = db.Column(db.SmallInteger())
     vp_scale = db.Column(db.SmallInteger())
     time_display = db.Column(db.SmallInteger())
