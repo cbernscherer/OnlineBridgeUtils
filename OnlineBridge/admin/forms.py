@@ -47,7 +47,7 @@ class UserDetailForm(FlaskForm):
     submit = SubmitField('Speichern')
 
 
-class CountryForm():
+class CountryForm(FlaskForm):
     code = StringField('Code', validators=[Regexp(regex='^[a-zA-Z]{3}$', message='Falsche Form XXX'),
                                                             InputRequired()],
                        render_kw={'autofocus': True, 'placeholder': "XXX"},

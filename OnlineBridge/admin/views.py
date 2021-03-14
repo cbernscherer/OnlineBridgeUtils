@@ -1,9 +1,11 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
 from flask_user import roles_required, current_user
-from OnlineBridge.admin.forms import PlayerUploadForm, GuestDetailForm, UserDetailForm
+from OnlineBridge.admin.forms import PlayerUploadForm, GuestDetailForm, UserDetailForm, CountryForm
 from OnlineBridge.users.models import Member, User, Role
+from OnlineBridge.admin.models import Club, Country
 from OnlineBridge import db
 from utilities.populate_db import fed_members_upload
+from utilities import pagination_setup
 from math import ceil
 
 admin = Blueprint('admin', __name__, template_folder='templates/admin')
@@ -233,3 +235,70 @@ def get_user():
         abort(403)
 
     return redirect(url_for('admin.user_detail', slug=member.user.slug, page=page))
+
+
+@admin.route('/country/new', methods=['GET', 'POST'])
+@roles_required('Superuser')
+def new_country():
+    per_page = 10
+
+    page, last_page = pagination_setup(per_page, Country)
+
+    form = CountryForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        country = Country(
+            code=form.code.data.upper(),
+            name=form.name.data.strip().title()
+        )
+
+        db.session.add(country)
+        db.session.commit()
+
+        return redirect(url_for('admin.new_country', page=page))
+
+    countries = Country.query.order_by(Country.code.asc()).paginate(page=page, per_page=per_page)
+
+    context = {
+        'form': form,
+        'countries': countries,
+        'new_country': True,
+        'page': page
+    }
+    return render_template('country.html', **context)
+
+
+@admin.route('/country/<int:id>/update', methods=['GET', 'POST'])
+@roles_required('Superuser')
+def update_country(id):
+    country = Country.query.filter_by(id=id).first_or_404()
+
+    per_page = 10
+
+    page, last_page = pagination_setup(per_page, Country)
+
+    form = CountryForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        country.code = form.code.data.upper()
+        country.name = form.name.data.strip().title()
+
+        db.session.add(country)
+        db.session.commit()
+
+        return redirect(url_for('admin.new_country', page=page))
+
+    elif request.method == 'GET':
+        form.code.data = country.code
+        form.name.data = country.name
+
+    countries = Country.query.order_by(Country.code.asc()).paginate(page=page, per_page=per_page)
+
+    context = {
+        'form': form,
+        'countries': countries,
+        'this_country': country,
+        'new_country': False,
+        'page': page
+    }
+    return render_template('country.html', **context)
