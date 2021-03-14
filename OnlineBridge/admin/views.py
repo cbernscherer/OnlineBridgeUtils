@@ -302,3 +302,18 @@ def update_country(id):
         'page': page
     }
     return render_template('country.html', **context)
+
+
+@admin.route('/country/<int:id>/delete', methods=['GET'])
+@roles_required('Superuser')
+def delete_country(id):
+
+    page = request.args.get('page', 1, type=int)
+
+    if request.method == 'GET':
+        country = Country.query.filter_by(id=id).first_or_404()
+
+        db.session.delete(country)
+        db.session.commit()
+
+    return redirect(url_for('admin.new_country', page=page))
