@@ -113,8 +113,12 @@ def guest_new():
     guests = Member.query.filter(Member.guest_nr.isnot(None)).all()
 
     if len(guests) > 0:
-        ctry_codes = list(set([g.guest_nr[:3] for g in guests]))
-        ctry_codes.sort()
+        ctry_codes = [g.guest_nr[:3] for g in guests]
+
+    ctry_codes.extend([c.code for c in Country.query.all()])
+
+    ctry_codes = list(set(ctry_codes))
+    ctry_codes.sort()
 
     context = {
         'form': form,
@@ -251,11 +255,14 @@ def new_country():
             code=form.code.data.upper(),
             name=form.name.data.strip().title()
         )
+        try:
+            db.session.add(country)
+            db.session.commit()
 
-        db.session.add(country)
-        db.session.commit()
-
-        return redirect(url_for('admin.new_country', page=page))
+            return redirect(url_for('admin.new_country', page=page))
+        except:
+            db.session.rollback()
+            flash('Code und Name müssen eindeutig sein', category='error')
 
     countries = Country.query.order_by(Country.code.asc()).paginate(page=page, per_page=per_page)
 
@@ -282,10 +289,14 @@ def update_country(id):
         country.code = form.code.data.upper()
         country.name = form.name.data.strip().title()
 
-        db.session.add(country)
-        db.session.commit()
+        try:
+            db.session.add(country)
+            db.session.commit()
 
-        return redirect(url_for('admin.new_country', page=page))
+            return redirect(url_for('admin.new_country', page=page))
+        except:
+            db.session.rollback()
+            flash('Code und Name müssen eindeutig sein', category='error')
 
     elif request.method == 'GET':
         form.code.data = country.code

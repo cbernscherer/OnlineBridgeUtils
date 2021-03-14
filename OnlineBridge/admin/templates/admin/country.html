@@ -84,14 +84,14 @@
             </button>
           </div>
           <div class="modal-body">
-            {% if this_param %}
+            {% if this_country %}
               {{ this_country.code }} {{ this_country.name }} wirklich löschen?
             {% endif %}
 
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
-            {% if this_param %}
+            {% if this_country %}
               <form action="{{ url_for('admin.delete_country', id=this_country.id, page=countries.page) }}" method="get">
                 <button type="submit" class="btn btn-danger">Löschen</button>
               </form>

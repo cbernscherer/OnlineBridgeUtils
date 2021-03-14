@@ -50,7 +50,7 @@ class UserDetailForm(FlaskForm):
 class CountryForm(FlaskForm):
     code = StringField('Code', validators=[Regexp(regex='^[a-zA-Z]{3}$', message='Falsche Form XXX'),
                                                             InputRequired()],
-                       render_kw={'autofocus': True, 'placeholder': "XXX"},
-                       filters=[lambda x: x.upper()])
+                       render_kw={'autofocus': True, 'placeholder': "XXX"})
+
     name = StringField('Name', validators=[InputRequired(), Length(max=50, message='maximal 50 Zeichen')])
     submit = SubmitField('Speichern')
