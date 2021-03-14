@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import FileField, SubmitField, StringField, BooleanField, SelectField
 from wtforms.widgets import CheckboxInput
-from wtforms.validators import InputRequired, ValidationError, Length, Regexp
+from wtforms.validators import InputRequired, ValidationError, Length, Regexp, NumberRange
+from wtforms.fields.html5 import IntegerField
+from OnlineBridge.admin.models import Country
 from OnlineBridge import MEMBER_FILENAME
 
 class PlayerUploadForm(FlaskForm):
@@ -54,3 +56,18 @@ class CountryForm(FlaskForm):
 
     name = StringField('Name', validators=[InputRequired(), Length(max=50, message='maximal 50 Zeichen')])
     submit = SubmitField('Speichern')
+
+
+class ClubForm(FlaskForm):
+    country = SelectField('Staat', coerce=int, validators=[InputRequired()], render_kw={'autofocus': True})
+    club_nr = IntegerField('Clubnummer', validators=[InputRequired(), NumberRange(min=1, message='nur positive Zahlen')])
+    short = StringField('Kurzname', validators=[InputRequired(), Length(max=10, message='maximal 10 Zeichen')])
+    name = StringField('Name', validators=[InputRequired(), Length(max=50, message='maximal 50 Zeichen')])
+    submit = SubmitField('Speichern')
+
+    def __init__(self, *args, **kwargs):
+        super(ClubForm, self).__init__(*args, **kwargs)
+
+        countries = [(c.id, f'{c.code}')for c in Country.query.order_by(Country.code.asc()).all()]
+        if len(countries) > 0:
+            self.country.choices = countries
