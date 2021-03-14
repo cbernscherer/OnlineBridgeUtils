@@ -262,8 +262,7 @@ def new_country():
     context = {
         'form': form,
         'countries': countries,
-        'new_country': True,
-        'page': page
+        'new_country': True
     }
     return render_template('country.html', **context)
 
@@ -298,8 +297,7 @@ def update_country(id):
         'form': form,
         'countries': countries,
         'this_country': country,
-        'new_country': False,
-        'page': page
+        'new_country': False
     }
     return render_template('country.html', **context)
 

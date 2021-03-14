@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1>
+      {% if new_country %}
+        Neuer Staat
+      {% else %}
+        {{ this_country.code }} {{ this_country.name }}
+      {% endif %}
+    </h1>
+
+    <form class="form" method="post" role="form">
+      {{ form.hidden_tag() }}
+      {{ wtf.form_errors(form, hiddens="only") }}
+
+      <div class="form-row">
+        <div class="col-3 col-lg-2">
+          {{ wtf.form_field(form.code) }}
+        </div>
+      </div>
+
+      {{ wtf.form_field(form.name) }}
+      {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
+
+      {% if not new_country %}
+        <button type="button" class="btn btn-danger ml-2 " data-toggle="modal" data-target="#DelModal">
+          Löschen
+        </button>
+
+        <a class="btn btn-dark ml-2" href="{{ url_for('admin.new_country', page=countries.page) }}" role="button">Zurück</a>
+      {% endif %}
+
+    </form>
+  </div>
+
+  {% for country in countries.items %}
+    <a href="{{ url_for('admin.update_country', id=country.id, page=countries.page) }}" class="text-reset">
+      <div class="row {{ loop.cycle('bg-light', 'bg-transparent') }}">
+        <div class="col-3 col-lg-2">
+          {{ country.code }}
+        </div>
+        <div class="col">
+          {{ country.name }}
+        </div>
+      </div>
+    </a>
+  {% else %}
+    <div class="row">
+      <div class="col">
+        Keine Einträge gefunden
+      </div>
+    </div>
+  {% endfor %}
+
+
+
+<nav aria-label='Guests aria' class="mt-2">
+  <ul class="pagination justify-content-center">
+    {% for page_num in countries.iter_pages(left_edge=1,right_edge=1,left_current=2,right_current=3)  %}
+      {% if page_num %}
+        <li class='page-item {% if countries.page == page_num %}disabled{% endif %}'>
+          <a class="page-link" href="{{url_for('admin.new_country', page=page_num)}}">{{ page_num}}</a>
+          </li>
+      {% else %}
+        <li class='page-item disabled'>
+          <span class="page-link">...</span>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+</nav>
+
+
+{#    <!-- Modalfor confirm delete -->#}
+    <div class="modal fade" id="DelModal" tabindex="-1" aria-labelledby="DelModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Löschen bestätigen</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {% if this_param %}
+              {{ this_country.code }} {{ this_country.name }} wirklich löschen?
+            {% endif %}
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+            {% if this_param %}
+              <form action="{{ url_for('admin.delete_country', id=this_country.id, page=countries.page) }}" method="get">
+                <button type="submit" class="btn btn-danger">Löschen</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
