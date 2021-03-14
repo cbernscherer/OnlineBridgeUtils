@@ -27,7 +27,7 @@ class GuestDetailForm(FlaskForm):
         super(GuestDetailForm, self).__init__(*args, **kwargs)
 
         if new_guest:
-            self.country_code.validators = [InputRequired(), Regexp('^[A-Z]{3}$', message='Falsche Form (XXX)')]
+            self.country_code.validators = [InputRequired(), Regexp('^[A-Za-z]{3}$', message='Falsche Form (XXX)')]
             self.country_code.render_kw = {
                 'autofocus': True,
                 'list': 'ctry_codes_list',
@@ -44,4 +44,13 @@ class UserDetailForm(FlaskForm):
         (1, 'Player'), (2, 'Director'), (3, 'Admin'), (4, 'Superuser')
     ])
     active = BooleanField('aktiv', widget=CheckboxInput())
+    submit = SubmitField('Speichern')
+
+
+class CountryForm():
+    code = StringField('Code', validators=[Regexp(regex='^[a-zA-Z]{3}$', message='Falsche Form XXX'),
+                                                            InputRequired()],
+                       render_kw={'autofocus': True, 'placeholder': "XXX"},
+                       filters=[lambda x: x.upper()])
+    name = StringField('Name', validators=[InputRequired(), Length(max=50, message='maximal 50 Zeichen')])
     submit = SubmitField('Speichern')

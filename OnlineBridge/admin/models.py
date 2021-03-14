@@ -1,4 +1,5 @@
 from OnlineBridge import db
+from utilities import create_random_slug
 
 class Country(db.Model):
 
@@ -20,6 +21,7 @@ class Club(db.Model):
     __tablename__ = 'clubs'
 
     id = db.Column(db.Integer(), primary_key=True)
+    slug = db.Column(db.String(24), nullable=False, index=True, default=create_random_slug(24))
 
     country_id = db.Column(db.Integer(), db.ForeignKey(Country.id, ondelete='CASCADE'))
 

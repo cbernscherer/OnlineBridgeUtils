@@ -4,7 +4,7 @@ from OnlineBridge import db, app, MEMBER_FILENAME, MEMBER_MAPPING
 from OnlineBridge.users.models import Role, Member, User
 
 data_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'OnlineBridge', 'static', 'data')
-data_files = [MEMBER_FILENAME, 'guests.xlsx']
+data_files = [MEMBER_FILENAME, 'guests.xls']
 
 def populate():
 

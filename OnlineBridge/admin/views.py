@@ -60,8 +60,8 @@ def guest_update(slug):
         abort(404)
 
     if request.method == "POST" and form.validate_on_submit():
-        guest.first_name = form.first_name.data.title()
-        guest.last_name = form.last_name.data.title()
+        guest.first_name = form.first_name.data.strip().title()
+        guest.last_name = form.last_name.data.strip().title()
 
         db.session.add(guest)
         db.session.commit()
@@ -96,9 +96,9 @@ def guest_new():
             next_nr = max(nrs) + 1
 
         guest = Member(
-            guest_nr=form.country_code.data + '{:04d}'.format(next_nr),
-            first_name=form.first_name.data.title(),
-            last_name=form.last_name.data.title()
+            guest_nr=form.country_code.data.upper() + '{:04d}'.format(next_nr),
+            first_name=form.first_name.data.strip().title(),
+            last_name=form.last_name.data.strip().title()
         )
 
         db.session.add(guest)
