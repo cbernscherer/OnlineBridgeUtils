@@ -10,6 +10,9 @@ class Country(db.Model):
     code = db.Column(db.String(3), nullable=False, unique=True, index=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
 
+    # for fed_nr other than Austrian
+    fed_nr_offset = db.Column(db.Integer(), nullable=True, unique=True)
+
     clubs = db.relationship('Club', backref='country', lazy=True)
 
     def __repr__(self):
